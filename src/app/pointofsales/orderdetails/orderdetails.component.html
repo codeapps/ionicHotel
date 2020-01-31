@@ -1,0 +1,123 @@
+<ion-toolbar color='primary'>
+
+
+  <ion-buttons slot='start'>
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+
+  <ion-title *ngIf="!search">Orders</ion-title>
+
+  <ion-buttons slot='end' *ngIf="!search">
+    <ion-button (click)="search = true">
+      <ion-icon name='search' slot='icon-only'></ion-icon>
+    </ion-button>
+
+    <ion-button (click)="OnBack()">
+      <ion-icon name="arrow-round-back" slot='icon-only'></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+  <ion-searchbar *ngIf="search" showCancelButton="always" (ionCancel)='Oncancel()' (ionInput)='fnSearch($event)'
+    placeholder="Prodect Search.."></ion-searchbar>
+</ion-toolbar>
+
+
+<ion-content class="contents_img">
+  <div class="drop_img">
+
+    <div *ngIf="orderlist.length!==0" class="list_menu">
+      <ion-row>
+
+
+        <ion-col>
+          <ion-button color="secondary" expand="full" (click)="lish_show = !lish_show">
+            List
+            <ion-icon slot="end" name="list-box">
+            </ion-icon>
+            <ion-badge slot="end" color="danger">{{ orderlist.length}}</ion-badge>
+
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="success" expand="full" (click)="fnkotSave()">
+            Confirm
+            <ion-icon slot="start" name="restaurant"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+        <ion-col>
+          <ion-button color="danger" expand="full" (click)="orderlist = []">
+            Clear List
+            <ion-icon slot="end" name="close">
+            </ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+    </div>
+
+    <div *ngIf="lish_show && orderlist.length!==0" animation class="list_preview">
+      <ion-item>
+        <ion-label>Quantity</ion-label>
+        <ion-label>Name</ion-label>
+        <ion-label>Rate</ion-label>
+        <ion-label>Toal</ion-label>
+      </ion-item>
+      <div class="div_list">
+        <ion-list>
+          <ng-container *ngFor="let list of orderlist">
+            <ion-item (click)="presentActionSheet(list)">
+              <ion-label>{{list.KotSub_Qty}}</ion-label>&nbsp;
+              <ion-label>{{list.ProductName}}</ion-label>&nbsp;
+              <ion-label>{{list.KotSub_ActualRate}}</ion-label>&nbsp;
+              <ion-label>{{list.KotSub_Qty * list.KotSub_ActualRate}}</ion-label>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </div>
+      <ion-item>
+        <ion-label>{{getTotalQty()}}</ion-label>
+        <ion-label></ion-label>
+        <ion-label></ion-label>
+        <ion-label>{{fnKotTotal()}}</ion-label>
+      </ion-item>
+    </div>
+    <div class="flex_container">
+
+
+      <div class="div_inner1">
+        <ion-row> 
+          <ion-col *ngFor="let c of category; let i = index" size='12'>
+            <ion-button expand="full" (click)='getProduct(c,i)' [color]="active == c.CategoryID ? 'tertiary' : 'dark'">
+              {{c.CategoryName}}</ion-button>
+
+              <!-- <ion-chip (click)='getProduct(c,i)' [color]="active == c.CategoryID ? 'tertiary' : 'dark'">
+                  <ion-label color='light'>{{c.CategoryName}}</ion-label>
+                </ion-chip> -->
+          </ion-col>
+ 
+        </ion-row>
+      </div>
+
+      <div class="div_inner2">
+        <ion-row>
+          <ion-col *ngFor="let p of product" size='6'>
+
+            <div class="ion-activatable image_items" (click)="getProductDetails(p.ProductId, p.ProductName)">
+              <ion-ripple-effect></ion-ripple-effect>
+              <div class="innerdiv_images">
+                <div class="box_line">
+                  {{p.ProductName}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+
+
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>

@@ -1,0 +1,100 @@
+.contents_img {
+    background-image: url('../../../assets/images/Hotel/bg-04.jpg');
+    --background: none;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .drop_img {
+        background-color: #42424280;
+        height: -webkit-fill-available;
+        
+        
+        .list_menu {
+            ion-button {
+                text-transform: capitalize;
+
+                ion-badge {
+                    position: absolute;
+                    top: 2px;
+                    right: 24px;
+                    border-radius: 100%;
+                }
+            }
+        }
+
+        .list_preview {
+            ion-item {
+                font-size: 12px;
+                --min-height: 35px;
+
+                ion-label {
+                    white-space: normal;
+                }
+            }
+            .div_list {
+                width: 100%;
+                max-height: 200px;
+                overflow: auto;
+
+            }
+        }
+
+        .flex_container {
+            display: flex;
+
+            .div_inner1 {
+                width: 30%;
+                height: 90vh;
+                overflow: auto;
+            }
+
+            .div_inner2 {
+                width: 70%;
+                height: 90vh;
+                overflow: auto;
+            }
+
+            .image_items {
+                background-repeat: no-repeat;
+                background-size: cover;
+                height: 90px;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                text-align: center;
+                box-shadow: 0px 2px 2px 0px #a2a2a2;
+                border-radius: 2px;
+
+                .innerdiv_images {
+
+                    background-color: #ffffffcc;
+                    padding: 5px;
+                    height: 100%;
+                    width: 100%;
+                    align-items: center;
+                    border-radius: 3px;
+
+                    .box_line {
+                        padding: 5px;
+                        font-size: 12px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        font-weight: 500;
+                        font-family: cursive;
+                        color: #1e2327;
+                        height: 100%;
+                        width: 100%;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                        border: 1px solid #1e2327;
+                        border-radius: 2px;
+                    }
+                }
+
+            }
+        }
+
+    }
+}

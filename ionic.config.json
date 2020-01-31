@@ -1,5 +1,7 @@
 {
-  "name": "CodeAppshotel",
-  "integrations": {},
+  "name": "CodeApps Hotel",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

@@ -1,0 +1,17 @@
+.settelements {
+    ion-item {
+    font-size: 12px;
+    --min-height: 35px;
+
+    ion-label {
+        white-space: normal;
+    }
+}
+}
+ion-item {
+--min-height: 40px;
+}
+
+ion-button {
+    text-transform: capitalize;
+}

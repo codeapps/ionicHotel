@@ -1,0 +1,12 @@
+.content_back {
+    --background: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('../../../assets/images/Hotel/bg-chair.jpg');
+
+    .drop_back {
+        // height: 100%;
+        background-color: #02020287;
+        display: table;
+    }
+}

@@ -1,0 +1,85 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content class="login_content" padding>
+
+  <div class="login_tittle">
+    <ion-title style="text-align: center">Login</ion-title>
+  </div>
+
+  <div *ngIf="urlactive">
+    <ion-list>
+      <form [formGroup]="UrlForms" #urlform="ngForm" (ngSubmit)="presentActionSheet(urlform)">
+
+        <ion-item>
+          <ion-icon name="link" slot='start' color="light"></ion-icon>
+          <ion-label position="floating">Domain Url</ion-label>
+          <ion-input formControlName="urllinks" type="text" required></ion-input>
+        </ion-item>
+        <br />
+        <ion-button expand="full" type='submit' shape="round" class="btn_login">Submit !</ion-button>
+
+      </form>
+
+    </ion-list>
+
+  </div>
+
+  <div *ngIf="!urlactive">
+
+    <ion-list>
+      <form [formGroup]="slideOneForm" #form="ngForm" (ngSubmit)="onLogin(form)">
+
+        <ion-item>
+          <ion-icon name="person" slot='start' color="light"></ion-icon>
+          <ion-label position="floating">User Name</ion-label>
+          <ion-input formControlName="username" type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="lock" slot='start' color="light"></ion-icon>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input formControlName="password" type="password" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <!-- <ion-icon name="git-branch" slot='start' color="light"></ion-icon> -->
+          <ion-label position="floating">Branch</ion-label>
+          <ion-select formControlName="branch" required>
+            <ion-select-option *ngFor="let branch of branchInfo" [value]='branch.BranchId' selected>
+              {{branch.BranchName}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-text color='light'>
+          <p style="text-align: right">Forgot Password ?</p>
+        </ion-text>
+
+        <ion-button expand="full" type='submit' shape="round" class="btn_login">Sign In!</ion-button>
+
+      </form>
+
+    </ion-list>
+    <div class="div_branch">
+      <ion-text color="light" style="text-align: center">
+        <p *ngFor="let p of branchInfo; let i = index">
+          <ng-container *ngIf="i == 0">
+            {{p.BranchName}} <br />
+            {{p.BranchAdr1}} <br />
+            {{p.BranchAdr2}} <br />
+            {{p.BranchAdr3}} <br />
+          </ng-container>
+
+
+        </p>
+      </ion-text>
+    </div>
+
+  </div>
+
+
+
+</ion-content>

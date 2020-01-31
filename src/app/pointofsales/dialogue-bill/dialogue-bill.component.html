@@ -1,0 +1,158 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Bill List</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="kotAdd()">
+        <ion-icon color='success' name="add" slot='icon-only'></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="OnClose()">
+        <ion-icon color='danger' name="close" slot='icon-only'></ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+  <div *ngIf="!showSettled" class='settelements'>
+    <ion-button expand='full'  color='tertiary' (click)="getBillSerice();showSettled = true">
+      Bill Settlement
+    </ion-button>
+
+    <ion-text color="dark">
+      <p>&nbsp; SalesMan:&nbsp;<span>{{salesman}}</span></p>
+    </ion-text>
+
+
+    <ion-list>
+      <ion-item>
+        <ion-label>Qty&nbsp;-&nbsp;ProductName&nbsp;</ion-label>
+        <ion-label>Amount</ion-label>
+      </ion-item>
+
+      <ion-item *ngFor="let item of reportItems">
+        <ion-label>{{item.KotSub_Qty}}&nbsp;-&nbsp;{{item.ProductName}}&nbsp;</ion-label>
+        <ion-label>{{item.KotSub_Amt}}</ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Total</ion-label>
+        <ion-label>{{ fnBillTotal()}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="showSettled">
+    <ion-row>
+      <ion-col>
+        <ion-button expand='full' (click)="showSettled = false">
+          <ion-icon name="arrow-back" slot='start'></ion-icon>
+          Previous
+        </ion-button>
+      </ion-col>
+
+      <ion-col>
+        <ion-button expand='full' (click)="OnPayments()" color='success'>
+          <ion-icon name="wallet" slot='start'></ion-icon>
+          Payment
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-item>
+      <ion-label>Pay terms</ion-label>
+      <ion-select placeholder="Select One" [(ngModel)]='billSerId'>
+        <ion-select-option *ngFor="let BillSerice of billserice" [value]="BillSerice.BillSerId" selected>
+          {{BillSerice.BillSerPrefix}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-list lines='none'>
+
+      <ion-radio-group [(ngModel)]="payments">
+        <ion-list-header>
+          <ion-label>Payment Method</ion-label>
+        </ion-list-header>
+
+        <ion-item>
+          <ion-radio slot="start" value="CASH" checked></ion-radio>
+          <ion-icon name="cash" slot="start"></ion-icon>
+          <ion-label>CASH</ion-label>
+
+        </ion-item>
+
+        <ion-item>
+          <ion-radio slot="start" value="CARD"></ion-radio>
+          <ion-icon name="card" slot="start"></ion-icon>
+          <ion-label>CARD</ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-radio slot="start" value="CREDIT"></ion-radio>
+          <ion-icon name="logo-closed-captioning" slot="start"></ion-icon>
+          <ion-label>CREDIT</ion-label>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <div *ngIf="payments == 'CARD'">
+      <ion-item>
+        <!-- <ion-label position="floating">Card Number</ion-label> -->
+        <ion-input placeholder="Card Number" [(ngModel)]="CardNumber"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <!-- <ion-label position="floating">Card Number</ion-label> -->
+        <ion-input placeholder="Card Holder's" [(ngModel)]="CardName"></ion-input>
+      </ion-item>
+      <ion-grid>
+
+        <ion-row>
+ 
+          <ion-col>
+            <!-- <ion-label position="floating">Valid Thru</ion-label> -->
+            <ion-select placeholder="MM" style="border-bottom: 1px solid #ccc;">
+              <ion-select-option *ngFor="let m of Months" [value]="m">{{m}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+
+          <ion-col>
+
+            <ion-select placeholder="YY" style="border-bottom: 1px solid #ccc;">
+              <ion-select-option *ngFor="let Y of years" [value]="Y">{{Y}}</ion-select-option>
+            </ion-select>
+
+          </ion-col>
+
+          <ion-col>
+            <ion-item>
+              <ion-input type='number' inputmode='numeric' [min]='3' [max]='3' [maxlength]='3' placeholder="CVV">
+              </ion-input>
+              <!-- <ion-icon name="help-circle" slot='end'></ion-icon> -->
+            </ion-item>
+         </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-item>
+          <ion-label position="floating">Card Amount</ion-label>
+          <ion-input type='number' [value]='fnBillTotal()' readonly></ion-input>
+        </ion-item>
+      
+      <ion-item>
+        <ion-label>Bank</ion-label>
+        <ion-select placeholder="Select One" [(ngModel)]='BankID'>
+          <ion-select-option *ngFor="let bank of accoundHedGetData" [value]="bank.AC_Id" selected>
+            {{bank.AC_Name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+    </div>
+
+  </div>
+</ion-content>

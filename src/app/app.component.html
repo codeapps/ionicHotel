@@ -1,17 +1,26 @@
 <ion-app>
   <ion-split-pane>
     <ion-menu type="overlay">
-      <ion-header>
+      <!-- <ion-header>
         <ion-toolbar>
           <ion-title>Menu</ion-title>
         </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
+      </ion-header> -->
+
+      <ion-content class="wrapper-content">
+
+        <div class="content_Sidebar">
+          <div class='subtitle'>
+            <span>&lt;[.]&gt;</span>
+            <span>CodeApps</span>
+          </div>
+        </div>
+        
+        <ion-list lines='none'>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
+            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]" >
+              <ion-icon slot="start" [name]="p.icon" color='light'></ion-icon>
+              <ion-label color='light'>
                 {{p.title}}
               </ion-label>
             </ion-item>

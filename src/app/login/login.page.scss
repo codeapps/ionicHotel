@@ -1,0 +1,44 @@
+.login_content {
+    .login_tittle {
+        padding: 10px;
+        color: #fffffe;
+    }
+
+    --background: none;
+    background-image: url('../../assets/images/Hotel/bg-03.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    ion-list {
+        background: transparent;
+
+        ion-item {
+            --background: none;
+            --border-color: blanchedalmond;
+            color: #efefef;
+
+        }
+    }
+
+    .btn_login {
+        --background: #ad9463;
+        --background-activated: #917a4c;
+        --background-focused: #917a4c;
+        --background-hover: #917a4c;
+        --border-color: #ad9463;
+        text-transform: capitalize;
+
+    }
+
+    .div_branch {
+        border: 1px solid #917a4c;
+        font-size: 13px;
+        background: #989aa22e;
+        border-radius: 3px;
+    }
+}
+
+.item-has-focus .label-floating.sc-ion-label-md-h {
+    color: #ffcaca;
+}

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Salesman</ion-title>
+
+    <ion-buttons slot='end'>
+      <ion-button (click)="OnChecked()">
+        <ion-icon name="checkmark" color='success' slot='icon-only'></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="OnClose()">
+        <ion-icon name='close' color='danger' slot='icon-only'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-radio-group (ionSelect)="fnchecked($event)">
+      <ion-list-header>
+        <ion-label>Select</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let sale of searchSalesmanResult">
+        <ion-label>{{sale.AC_Name}}</ion-label>
+        <ion-radio slot="start" [value]="sale.AC_Id" checked></ion-radio>
+      </ion-item>
+
+    </ion-radio-group>
+  </ion-list>
+
+</ion-content>

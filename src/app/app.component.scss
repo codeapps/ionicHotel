@@ -1,0 +1,38 @@
+
+.wrapper-content {
+    --background: #565a65;
+    ion-list {
+        background: transparent;
+        ion-item {
+            --background: transparent;
+        }
+    }
+    .content_Sidebar {
+        background-image: url('../assets/images/Hotel/bg-01.jpg');
+        height: 300px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        .subtitle {
+            justify-items: center;
+            display: grid;
+            background: #1e202363;
+            color: #fff;
+            font-size: 26px;
+            padding: 22px;
+            border: 1px solid;
+            letter-spacing: 5px;
+            
+            span:first-child {
+                color: #ffffff;
+                font-family: monospace;
+            }
+            span:last-child {
+                color: #00e4ff;
+            }
+        }
+    }
+}
