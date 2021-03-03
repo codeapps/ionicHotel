@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { AuthenticationService } from './login/authentication/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -16,16 +18,48 @@ export class AppComponent {
       url: '/home',
       icon: 'home'
     }, {
-      title: 'Logout',
-      url: '/',
-      icon: 'log-out'
-    }
+      
+      title: 'Room Booking',
+      url: '/booking/roomregister',
+      icon: 'book'
+    },
+    {
+      title: 'Kot List',
+      url: '/pointofsales/kotlist',
+      icon: 'book'
+    },
+    {
+      title: 'Bill List',
+      url: '/pointofsales/billList',
+      icon: 'book'
+    },
+    {
+      title: 'POS New',
+      url: '/pos-table',
+      icon: 'restaurant'
+      
+    },
+    {
+      title: 'Point of Sales',
+      url: '/pointofsales',
+      icon: 'restaurant'
+      
+    },
+    {
+      title: 'Printer Settings',
+      url: '/print-settings',
+      icon: 'print'
+      
+    },
+    
   ];
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private router: Router,
+    private authenticationService: AuthenticationService
   ) {
     this.initializeApp();
   }
@@ -34,6 +68,17 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.authenticationService.authState.subscribe(state => {
+        if (state) {
+          this.router.navigate(['userpincode']);
+        } else {
+          this.router.navigate(['login']);
+        }
+      });
     });
+  }
+
+  logOut() {
+    this.authenticationService.logout();
   }
 }

@@ -1,0 +1,153 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Invoice Print</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item lines="full">
+      <ion-label>Make Thermal Printer Default</ion-label>
+      <ion-toggle slot="end" [(ngModel)]="printerOption.defaultPrint" (ionChange)="setPrinter()"></ion-toggle>
+    </ion-item>
+    <div *ngIf="!printerOption.defaultPrint" class="list-backdrop"></div>
+    <ion-item-divider>
+      <ion-label>Thermal Printer Settings</ion-label>
+    </ion-item-divider>
+    
+    <ion-item button lines="full" (click)="pairedDeviceModal()">
+      <ion-label>Set Default Thermal Printer</ion-label>
+      <ion-icon name="arrow-dropright" slot="end"></ion-icon>
+    </ion-item>
+    <ion-item lines="full">
+      <ion-label>Thermal printer page size</ion-label>
+      <ion-select [(ngModel)]="printerOption.pageSize" (ionChange)="setPrinter()">
+        <ion-select-option value="2inch">2 inch (58mm)</ion-select-option>
+        <ion-select-option value="3inch">3 inch (80mm)</ion-select-option>
+        <ion-select-option value="4inch">4 inch (100mm)</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-item lines="full" class="count-col">  
+      <ion-label>Extra Lines at print end</ion-label>
+      <ion-button size="small" color="light" slot="icon-only" slot="end" (click)="lineDecrease()">
+        <ion-icon name="remove" ></ion-icon>
+      </ion-button>
+      
+      <input [(ngModel)]="printerOption.extraLine" slot="end" />
+      
+      <ion-button size="small" color="light" slot="icon-only" slot="end" (click)="lineIncrease()">
+        <ion-icon name="add" ></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label>Change Thermal printer text size</ion-label>
+    </ion-item>
+    <ion-radio-group [(ngModel)]="printerOption.textSize" (ionChange)="setPrinter()">
+    <ion-item lines="full">
+      <ion-radio slot="start" value="small"></ion-radio>
+      <ion-label>Small</ion-label>
+      <ion-radio slot="end" value="regular"></ion-radio>
+      <ion-label slot="end">Regular</ion-label>
+    </ion-item>
+  </ion-radio-group>
+
+  <ion-item lines="full" class="count-col">  
+    <ion-label>Number of copies</ion-label>
+    <ion-button size="small" color="light" slot="icon-only" slot="end" (click)="pageDecrease()">
+      <ion-icon name="remove" ></ion-icon>
+    </ion-button>
+    
+    <input [(ngModel)]="printerOption.numCopies" slot="end" />
+    
+    <ion-button size="small" color="light" slot="icon-only" slot="end" (click)="pageIncrease()">
+      <ion-icon name="add" ></ion-icon>
+    </ion-button>
+  </ion-item>
+  <ion-item-divider>
+    <ion-label>Print Company Info/Header</ion-label>
+  </ion-item-divider>
+  <ion-item lines="full">
+    <ion-label>Print Company Name</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.cmpName" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Address</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.address" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Email</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.email" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Phone Number</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.phoneNo" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>GSTIN on Sale</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.gstIn" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item-divider>
+    <ion-label>Total & Taxes</ion-label>
+  </ion-item-divider>
+
+  <ion-item lines="full">
+    <ion-label>Total Item Quantity</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.totalQty" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label>Ammount with Decimal(eg 0.00)</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.decimal" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-label>Received Amount</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.rcvedAmount" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-label>Balance Amount</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.balAmount" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-label>Tax Detailed</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.taxDetail" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item-divider>
+    <ion-label>Footer</ion-label>
+  </ion-item-divider>
+  <ion-item lines="full">
+    <ion-label>Print Description</ion-label>
+    <ion-toggle slot="end" [(ngModel)]="printerOption.tandc" (ionChange)="setPrinter()"></ion-toggle>
+  </ion-item>
+
+  <ion-item-divider>
+    <ion-label>Terms and conditions</ion-label>
+  </ion-item-divider>
+
+    <ion-item lines="full" *ngFor="let desc of printerOption.description; let i = index">
+    <ion-textarea (ionInput)='setPrinter()' placeholder="Enter Descriptions {{i + 1}}" [value]="desc"></ion-textarea>
+    <ion-button fill="clear" slot="end" (click)="removeDesc(i)">
+      <ion-icon name='close' slot="icon-only" color="danger"></ion-icon>
+    </ion-button>
+  </ion-item>
+    
+    
+    <ion-button (click)="addDesc()" expand="block" fill="clear" shape="round">
+      Add More 
+      <ion-icon name='add' slot="end"></ion-icon>
+    </ion-button>
+    
+</ion-list>
+</ion-content>

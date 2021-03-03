@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onClose()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Payment</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-item button lines='none'>
+      <ion-button shape='round' fill='clear' color="primary" slot="start">
+        <ion-icon slot="icon-only" name='person'></ion-icon>
+      </ion-button>
+      <ion-label>
+        <h3>{{main.cusName ? main.cusName: 'Add Customer'}}</h3>
+        <ion-button size='small' class="ion-text-capitalize" fill='clear' color="primary" (click)="onRemove()">
+          (Remove)
+        </ion-button>
+      </ion-label>
+      
+      <ion-button shape='round' size='large' fill='clear' color="medium" slot="end" (click)="onAddCustomer()">
+        <ion-icon slot="icon-only" name='add'></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-item lines='none'>
+      <ion-badge slot="start" color="danger">₹&nbsp;{{main.paid | number : '1.2-2'}}</ion-badge>
+      <ion-label slot="end">Amount</ion-label>
+      <ion-button (click)="showlist = !showlist" fill='clear' slot="end" color="medium">
+        <ion-icon name="apps" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ng-container *ngIf="showlist">
+      <ion-item lines='full' *ngFor="let sub of issueSub">
+        <ion-label>
+          <h3>{{sub.name}} ({{sub.code}})</h3>
+          <p>{{sub.qty}}x&nbsp;₹{{sub.rate}}</p>
+        </ion-label>
+        <ion-text color="primary" slot="end">
+          <p>₹&nbsp;{{sub.total}}</p>
+        </ion-text>
+      </ion-item>
+    </ng-container>
+  </ion-card>
+
+  <!-- <ion-card>
+    <ion-item lines='none'>
+      <ion-label>Total Quantity: </ion-label>
+      <ion-text slot="end">
+        <p></p>
+      </ion-text>
+    </ion-item>
+  </ion-card> -->
+
+  <ion-item lines='none'>
+    <ion-label slot="start">Tax Amount: {{main.taxableAmt | number : '1.2-2'}}</ion-label>
+    <p slot="end">Discount: {{main.discount | number : '1.2-2'}} </p>
+  </ion-item>
+  <!-- | number : '1.2-2' -->
+  <ion-card>
+    <ion-item>
+      <ion-label>Bill Series</ion-label>
+      <ion-select [(ngModel)]="billSeriesId">
+        <ion-select-option *ngFor="let item of billserice" [value]='item.BillSerId'>
+          {{item.BillSerPrefix}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-label>Pay Terms</ion-label>
+      <ion-select [(ngModel)]="payTerms">
+        <ion-select-option value='CASH'>CASH</ion-select-option>
+        <ion-select-option value='CARD'>CARD</ion-select-option>
+        <ion-select-option value='CREDIT'>CREDIT</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item button color="primary" (click)="onPrinterValidate()">
+      <ion-label class="ion-text-center">Continue</ion-label>
+    </ion-item>
+  </ion-card>
+
+
+</ion-content>

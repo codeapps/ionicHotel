@@ -1,0 +1,37 @@
+
+.print-content {
+    .header-box {
+        h2 {
+            margin: 0;
+        }
+        p {
+            margin: 0;
+        }
+    }
+    .tbl-print {
+        width: 100%;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            th {
+                border: 1px solid #000;
+            }
+
+            td {
+                border: 1px solid #000;
+            }
+        }
+    }
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.w-50 {
+    width: 50%;
+}

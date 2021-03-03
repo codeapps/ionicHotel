@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Preview</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onPrint()"> 
+        <ion-icon slot="icon-only" color="light" name="print"></ion-icon>
+      </ion-button>
+      <ion-button (click)="onShare()"> 
+        <ion-icon slot="icon-only" color="light" name="share"></ion-icon>
+      </ion-button>
+      <ion-button (click)="onClose()"> 
+        <ion-icon slot="icon-only" color="warning" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+<div id="print-content" class="print-content flex-column" >
+  <div center class="flex-column header-box ion-justify-content-center ion-align-items-center">
+      <h3>{{JsonBranchInfo.BranchName}}</h3>
+      <p>{{JsonBranchInfo.BranchAdr1}}</p>
+      <p>{{JsonBranchInfo.BranchAdr2}}</p>
+      <p>{{JsonBranchInfo.BranchAdr3}}</p>
+
+      <h4>GST INVOICE</h4>
+  </div>
+
+  <div class="flex-row">
+      <div class="flex-column w-50">
+          <div> 
+              <span class="w-50">GSTTIN&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.TinNo1}}</span>
+          </div>
+          <div>
+              <span class="w-50">CUSTOMER&nbsp;NAME&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.Issues_CustName}}</span>
+          </div>
+          <div>
+              <span class="w-50">MOBILE&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.Issues_Mobile}}</span>
+          </div>
+          <div>
+              <span class="w-50">TABLE&nbsp;NO&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.TableDetails_Name}}</span>
+          </div>
+      </div>
+      <div class="flex-column w-50">
+          <div>
+              <span class="w-50">INVOICE&nbsp;NO&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.Issues_BillNo}}</span>
+          </div>
+          <div>
+              <span class="w-50">INVOICE&nbsp;DATE&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.IssueDateOne}}</span>
+          </div>
+          <div>
+              <span class="w-50">SALESMAN&nbsp;:</span>
+              <span class="w-50">{{JsonIssueInfo.AC_Name}}</span>
+          </div>
+
+      </div>
+  </div>
+
+  <div  class="tbl-print">
+      <table>
+          <thead>
+              <tr>
+                  <th>No</th>
+                  <th>Commodity&nbsp;Items</th>
+                  <th>Qty</th>
+                  <th>Tax&nbsp;Amt</th>
+                  <th>Amount</th>
+              </tr>
+          </thead>
+
+          <tbody>
+              <tr *ngFor="let item of JsonIssueSubDetailsInfo; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.ProductName}}</td>
+                  <td>{{item.IssuesSub_Qty}}</td>
+                  <td>{{item.IssuesSub_TaxAmt}}</td>
+                  <td>{{item.IssuesSub_Amt}}</td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+</ion-content>

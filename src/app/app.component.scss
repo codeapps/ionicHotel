@@ -1,4 +1,23 @@
 
+
+::ng-deep ion-toolbar {
+    --min-height: 40px !important;
+    ion-buttons {
+        ion-menu-button {
+            width: 44px;
+            height: 44px;
+        }
+        
+        ion-button {
+            // width: 44px;
+            height: 44px;
+        }
+    }
+   
+    ion-title {
+        font-size: 15px;
+    }
+}
 .wrapper-content {
     --background: #565a65;
     ion-list {

@@ -1,0 +1,55 @@
+<ion-content>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">SUMMARY</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">Invoice No#</ion-col>
+      <ion-col size="6" class="ion-text-end">{{printMain.IssuesBillNo}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">Invoice Date</ion-col>
+      <ion-col size="6" class="ion-text-end">{{printMain.IssuesDate | date:'dd/MM/yyyy'}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col size="6">Pay Terms</ion-col>
+      <ion-col size="6" class="ion-text-end">{{printMain.IssuePayTerms}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col size="6">Customer Name</ion-col>
+      <ion-col size="6" class="ion-text-end">{{printMain.IssuesCustName}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">Sub Total</ion-col>
+      <ion-col size="6" class="ion-text-end">₹&nbsp;{{printMain.IssuesTotal}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">CGST</ion-col>
+      <ion-col size="6" class="ion-text-end">₹&nbsp;0.00</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">SGST</ion-col>
+      <ion-col size="6" class="ion-text-end">₹&nbsp;0.00</ion-col>
+    </ion-row>
+    <!-- <ion-row>
+      <ion-col size="6"></ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row> -->
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">Total Amount</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">₹&nbsp;{{printMain.IssuesTotal}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">Change</ion-col>
+      <ion-col size="6" class="ion-text-end">0.00</ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <ion-button expand='full' color="success" (click)="onOkey()">ok</ion-button>
+</ion-content>

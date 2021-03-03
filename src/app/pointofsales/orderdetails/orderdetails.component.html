@@ -74,7 +74,7 @@
             </ion-item>
           </ng-container>
         </ion-list>
-      </div>
+      </div> 
       <ion-item>
         <ion-label>{{getTotalQty()}}</ion-label>
         <ion-label></ion-label>
@@ -86,14 +86,15 @@
 
 
       <div class="div_inner1">
-        <ion-row> 
-          <ion-col *ngFor="let c of category; let i = index" size='12'>
-            <ion-button expand="full" (click)='getProduct(c,i)' [color]="active == c.CategoryID ? 'tertiary' : 'dark'">
-              {{c.CategoryName}}</ion-button>
-
-              <!-- <ion-chip (click)='getProduct(c,i)' [color]="active == c.CategoryID ? 'tertiary' : 'dark'">
-                  <ion-label color='light'>{{c.CategoryName}}</ion-label>
-                </ion-chip> -->
+        <ion-row *ngFor="let c of category; let i = index"> 
+          <ion-col  size='12'>
+           
+                <div class="inner-col ion-activatable ripple-parent"
+                (click)='getProduct(c,i)' [ngClass]="{'categoryactive': active == c.CategoryId}">
+                  {{c.CategoryName}}
+                  <ion-ripple-effect></ion-ripple-effect>
+                </div>
+                
           </ion-col>
  
         </ion-row>
@@ -101,6 +102,11 @@
 
       <div class="div_inner2">
         <ion-row>
+          <ion-col *ngIf="!product.length" size='12' class="ion-text-center">
+            <ion-text color="light">
+              Product Not Avilable!!
+            </ion-text>
+          </ion-col>
           <ion-col *ngFor="let p of product" size='6'>
 
             <div class="ion-activatable image_items" (click)="getProductDetails(p.ProductId, p.ProductName)">

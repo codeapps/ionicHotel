@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { ModalController, LoadingController, ToastController } from '@ionic/angular';
 import { DialoguesSalesmanComponent } from '../dialogues-salesman/dialogues-salesman.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { DialogueBillComponent } from '../dialogue-bill/dialogue-bill.component';
+import { BillPrintComponent } from 'src/app/print/bill-print/bill-print.component';
+import { PosAllService } from 'src/app/services/pos-all.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'charset=utf-8'
-  })
-};
 
 @Component({
   selector: 'app-tableorder',
@@ -22,42 +17,79 @@ export class TableorderComponent implements OnInit {
   baseApiUrl: any;
   tabDetail = [];
   jsonItems: any[];
-  selectType: string;
+  
   TableDetail_Id: any;
-  Table_Id: any;
+  Table_Id: any = 0;
   Kot_CustName: any;
   Kot_Mobile: any;
   strKotSalesmanId: any;
   strKotSalesman: any;
   dReportBill: any;
   Kot_TempOrderNo: any;
-  search:boolean;
+  selectType = "Table";
+  search: boolean;
+  branchId: string = '0';
+  roomSource: any;
+  Room_Id: any = 0;
+  tables: any[] = [];
   constructor(
     private storage: Storage,
-    public http: HttpClient,
+    private posService: PosAllService,
     public modalController: ModalController,
     private router: Router,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    public toastController: ToastController
   ) {
    
-    this.storage.get('mainurllink').then((val) => {
-      this.baseApiUrl = val;
-      this.getTableDtl();
-    });
-    this.router.events.subscribe((ev) => {
-      if (ev instanceof NavigationEnd) {
-        if (ev.id !== 1) {
-          setTimeout(() => {
-            this.getTableDtl();
-            // console.log('42524')
-          }, 1000);
-        }
-
-      }
-    });
+    this.storage.forEach((val, key) => {
+      if (key == 'SessionBranchId')
+        this.branchId = String(val);
+      else if (key == 'mainurllink')
+        this.baseApiUrl = val;
+    }).finally(() => {
+      this.getTables();
+    })
+   
+    
   }
 
   ngOnInit() { }
+  
+  doRefresh(event) {
+    this.getTables();
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
+
+  async testPrintModal() {
+    
+    const billSerId = 1;
+    const billNo = 493;
+    const uniqueNo = 503;
+    const printType = 'Table';
+    const modal = await this.modalController.create({
+      component: BillPrintComponent,
+      componentProps: {
+        billSerId: billSerId,
+        billNo:billNo,
+        uniqueNo: uniqueNo,
+        printType: printType,
+      } 
+      
+    });
+    return await modal.present();
+  }
+
+  async getTables() {
+    await this.posService.onGetTable(this.baseApiUrl, this.branchId)
+      .subscribe(async res => {
+        this.tables = res;
+        await this.getTableDtl();
+    })
+ }
 
   async getTableDtl() {
     this.tabDetail = [];
@@ -65,15 +97,15 @@ export class TableorderComponent implements OnInit {
       message: 'Loading',
     });
     await loading.present();
-    let ServiceParams = {};
-    ServiceParams['strProc'] = 'TableDetails_GetOnAll';
-
-    let body = JSON.stringify(ServiceParams);
-
-    await this.http.post<any>(this.baseApiUrl + '/fnGetDataReportNew', body, httpOptions)
+   
+    await this.posService.onGetTableDtls(this.baseApiUrl, this.branchId)
       .subscribe(data => {
         let dataJson = JSON.parse(data);
-        this.jsonItems = dataJson;
+         this.tables.map(x => {
+         x.child = dataJson.filter(y => y.Table_Id == x.TableId)
+        })
+       
+        this.jsonItems = this.tables;
         let totalLegth = this.jsonItems.length;
         loading.dismiss();
         if (totalLegth >= 100) {
@@ -86,13 +118,22 @@ export class TableorderComponent implements OnInit {
         if (this.tabDetail.length == 0) {
 
         } 
-
+        this.onRoomGets();
       }, error => {
         loading.dismiss();
         console.error(error)
       });
 
   }
+
+  onRoomGets() {
+    this.posService.onGetRooms(this.baseApiUrl, this.branchId)
+      .subscribe(result => {
+        this.roomSource = result;
+      });
+  }
+
+ 
 
   Oncancel() {
     this.tabDetail = [];
@@ -140,7 +181,14 @@ export class TableorderComponent implements OnInit {
     if (select_id == '') {
       return;
     } else {
-      let queryParam = {tblid: this.Table_Id, tbldetailId: this.TableDetail_Id, 
+      let id = 0;
+    if (this.selectType == 'Table') {
+     id = this.Table_Id;
+    } else {
+      id = this.Room_Id;
+      this.TableDetail_Id = 0;
+    }
+      let queryParam = {tblid: id, tbldetailId: this.TableDetail_Id, 
         selectType: this.selectType, custName: this.Kot_CustName, Mobile: this.Kot_Mobile,
          SalesmanId: select_id}
           this.router.navigate(['pointofsales/order', queryParam]);
@@ -148,10 +196,20 @@ export class TableorderComponent implements OnInit {
   }
 
   async BillsModal() {
+    let id = 0;
+    if (this.selectType == 'Table') {
+     id = this.Table_Id;
+    } else {
+      id = this.Room_Id;
+      this.TableDetail_Id = 0;
+      this.Kot_TempOrderNo = 0
+
+    }
     const modal = await this.modalController.create({
       component: DialogueBillComponent,
-      componentProps: [this.dReportBill,
-         {tblid: this.Table_Id, tbldetailId: this.TableDetail_Id, 
+      componentProps: [
+        this.dReportBill,
+         {tblid: id, tbldetailId: this.TableDetail_Id, 
           selectType: this.selectType, Kot_CustName: this.Kot_CustName,
            Kot_Mobile: this.Kot_Mobile, Kot_SalesmanId: this.strKotSalesmanId,
            Kot_TempOrderNo: this.Kot_TempOrderNo}]
@@ -162,44 +220,67 @@ export class TableorderComponent implements OnInit {
     this.getTableDtl();
   }
   
-  selectTableDetail(TableDtailId) {
+  async selectTableDetail(TableDtailId) {
 
-    this.http.get(this.baseApiUrl + '/TableDetailsGet_OnName?TableDtailId=' + TableDtailId.TableDetails_Id)
-      .subscribe(result => {
+   await this.posService.onSelectTableDetail(this.baseApiUrl, TableDtailId.TableDetails_Id)
+      .subscribe(result => { 
         let jsonTable = result;
-
         
         this.Table_Id = jsonTable[0].Table_Id;
         this.TableDetail_Id = jsonTable[0].TableDetails_Id;
-       this.Kot_TempOrderNo = jsonTable[0].BillNo;
+         this.Kot_TempOrderNo = jsonTable[0].BillNo;
 
-        this.selectType = 'Table';
         this.fnKotBillGetOnTableDetailId(jsonTable);
       }, error => console.error(error));
 
   }
 
+  roomClick(item, idx) {
+   
+    this.posService.onRoomGet(this.baseApiUrl, item.Room_Id)
+      .subscribe(async res => {
+        let dataRep = JSON.parse(res);
+       
+        if (!dataRep.length) {
+          const toast = await this.toastController.create({
+            message: 'Rooms Not avilable!!',
+            duration: 2000
+          });
+          toast.present();
+          return
+        }
+          
+          this.Table_Id =
+        this.Kot_Mobile = dataRep[0].Phone
+        this.Kot_CustName = dataRep[0].CustomerName;
+        this.Room_Id = item.Room_Id;
+        this.fnKotBillGetOnRoomId(item.Room_Id)
+    })
+  }
+
+  fnKotBillGetOnRoomId(roomId) {
+    this.posService.onKotBillGetOnRoomId(this.baseApiUrl, roomId)
+      .subscribe(res => {
+        const billDetailed = JSON.parse(res);
+        this.dReportBill = billDetailed;
+       
+        if (this.dReportBill.length) {
+          this.BillsModal();
+        } else {
+          // this.myModal = 'block';
+          this.SalesmanModal();
+        }
+    })
+
+  }
+
   fnKotBillGetOnTableDetailId(jsonTable) {
-
-    let ServiceParams = {};
-    ServiceParams['strProc'] = 'Kot_GetOnTempInvoiceNo';
-
-    let oProcParams = [];
-    let ProcParams = {};
-    ProcParams['strKey'] = 'TableDetails_Id';
-    ProcParams['strArgmt'] = jsonTable[0].TableDetails_Id;
-    oProcParams.push(ProcParams);
-    ServiceParams['oProcParams'] = oProcParams;
-
-    let body = JSON.stringify(ServiceParams);
-
-    this.http.post<any>(this.baseApiUrl + '/fnGetDataReportNew', body, httpOptions)
+    this.posService.onKotBillGetOnTableDetailId(this.baseApiUrl, String(jsonTable[0].TableDetails_Id))
       .subscribe(data => {
         let dataReport = JSON.parse(data);
         this.dReportBill = dataReport;
         //  this.fnBillTotal();
         // this.strKotSalesman = dataReport[0].AC_Name;
-        // this.strKotSalesmanId    =  dataReport[0].Kot_SalesmanId;
         if (dataReport.length > 0) {
           this.strKotSalesmanId    =  dataReport[0].Kot_SalesmanId;
           for (let i = 0; i < dataReport.length; i++) {
@@ -209,12 +290,9 @@ export class TableorderComponent implements OnInit {
 
             if (dataReport[i].Kot_Mobile != null && dataReport[i].Kot_Mobile != '') {
               this.Kot_Mobile = dataReport[i].Kot_Mobile;
-
             }
 
-
           }
-
           this.BillsModal();
 
         } else {

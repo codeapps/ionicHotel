@@ -1,12 +1,45 @@
 .content_back {
-    --background: none;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url('../../../assets/images/Hotel/bg-chair.jpg');
-
-    .drop_back {
-        // height: 100%;
-        background-color: #02020287;
-        display: table;
+  --background: none;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("../../../assets/images/Hotel/bg-chair.jpg");
+  height: 100%;
+  .drop_back {
+    height: 100%;
+    background-color: #02020287;
+    width: 100%;
+    // display: table;
+    .spn-text {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0px;
+      height: 25px;
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        border: 2px solid #f3f3f3;
+        width: 100%;
+        left: 0;
+        height: 20px;
+        right: 0;
+        top: 10px;
+        border-bottom: 0;
+      }
+      span {
+        width: 100px;
+        max-width: 150px;
+        background: #cc0e05;
+        position: absolute;
+        color: #fff;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        z-index: 100;
+        display: block;
+        padding: 3px;
+      }
     }
+  }
 }

@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertController, ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'charset=utf-8'
-  })
-};
+import { AlertController, ActionSheetController, LoadingController, ToastController, ModalController } from '@ionic/angular';
+import { AppService } from 'src/app/app.service';
+import { KotPrintComponent } from 'src/app/print/kot-print/kot-print.component';
 
 @Component({
   selector: 'app-orderdetails',
@@ -20,7 +13,7 @@ const httpOptions = {
 export class OrderdetailsComponent implements OnInit {
   baseApiUrl: any;
   category: any;
-  product: any;
+  product: any = [];
   active: boolean;
   orderlist = [];
   lish_show: boolean;
@@ -37,10 +30,11 @@ export class OrderdetailsComponent implements OnInit {
   strInclusiveCalRoom: any;
   constructor(
     private storage: Storage,
-    public http: HttpClient,
+    private appService: AppService,
     private router: Router,
-    private activeroute: ActivatedRoute,
+    activeroute: ActivatedRoute,
     public alertController: AlertController,
+    private modalCtrl: ModalController,
     public loadingController: LoadingController,
     public actionSheetController: ActionSheetController,
     public toastController: ToastController) {
@@ -68,14 +62,7 @@ export class OrderdetailsComponent implements OnInit {
 
   async fnSettings() {
 
-    let ServiceParams = {};
-    ServiceParams['strProc'] = 'Setting_GetValues';
-
-    let oProcParams = [];
-
-    let body = JSON.stringify(ServiceParams);
-
-    await this.http.post<any>(this.baseApiUrl + '/fnGetDataReportNew', body, httpOptions)
+    await this.appService.onSettings(this.baseApiUrl)
       .subscribe(data => {
         let settingGet = JSON.parse(data);
         settingGet.forEach(element => {
@@ -91,9 +78,10 @@ export class OrderdetailsComponent implements OnInit {
         // this.fnBillTotal();
       }, error => console.error(error));
   }
-
+ 
   getCategory() {
-    this.http.get(this.baseApiUrl + '/SerchCategory?term=' + '').subscribe(result => {
+    this.appService.get(this.baseApiUrl + '/GetRepository/SearchCategory?term=' + '')
+      .subscribe(result => {
       this.category = result;
       this.getProduct(this.category[0], 0);
     }, error => console.error(error));
@@ -105,12 +93,13 @@ export class OrderdetailsComponent implements OnInit {
       message: 'Loading',
     });
     await loading.present();
-    this.active = category.CategoryID;
+    this.active = category.CategoryId;
+   
     // this.GetImage();
     let CategorySelect = strIndex;
-    this.http.get(this.baseApiUrl + '/Product_GetOnCategoryId?dCategoryId=' + category.CategoryID)
+    this.appService.get(`${this.baseApiUrl}/GetRepository/Product_GetOnCategoryId?dCategoryId=${category.CategoryId}&branchId=${this.dBranchId}`)
       .subscribe(result => {
-        // console.log(result);
+        
         this.product = result;
         this.searchresult = this.product;
         loading.dismiss();
@@ -175,6 +164,8 @@ export class OrderdetailsComponent implements OnInit {
       alert.present().then(() => {
         const firstInput: any = document.querySelector('ion-alert input');
         firstInput.focus();
+        firstInput.select();
+        firstInput.before('Quantity')
         return;
       });
     }, 300);
@@ -242,6 +233,7 @@ export class OrderdetailsComponent implements OnInit {
   OnProductDetails(Id, Qty) {
     let newAttribute = {};
     let sameId = true;
+    
     if (this.orderlist.length !== 0) {
       this.orderlist.forEach(data => {
         if (data.ProductId == Id) {
@@ -252,9 +244,10 @@ export class OrderdetailsComponent implements OnInit {
     }
 
     if (sameId) {
-      this.http.get(this.baseApiUrl + '/Product_GetOnProductId?dProductId=' + Id)
+      this.appService.get(`${this.baseApiUrl}/GetRepository/Product_GetOnProductId?dProductId=${Id}&branchId=${this.dBranchId}`)
         .subscribe(result => {
           let jsonData = <any>result;
+             
           newAttribute = {
             ProductId: jsonData[0].ProductId, ProductName: jsonData[0].ProductName,
             KotSub_ActualRate: jsonData[0].Sel_Rate, KotSub_TaxPercent: jsonData[0].TaxPercent,
@@ -306,10 +299,10 @@ export class OrderdetailsComponent implements OnInit {
     let Kot_Mobile = '';
 
     if (this.selectType == 'Room') {
-      KotMain['Room_Id'] = 0;
+      KotMain['RoomId'] = Number(this.tableId);;
     } else {
-      KotMain['Table_Id'] = this.tableId;
-      KotMain['TableDetail_Id'] = this.tableDetailId;
+      KotMain['TableId'] = Number(this.tableId);
+      KotMain['TableDetailId'] = Number(this.tableDetailId);
     }
     if (this.custName == undefined || this.custName == null) {
 
@@ -319,12 +312,12 @@ export class OrderdetailsComponent implements OnInit {
 
       Kot_Mobile = '';
     }
-    KotMain['Kot_CustName'] = Kot_CustName;
-    KotMain['Kot_Mobile'] = Kot_Mobile;
-    KotMain['Kot_Total'] = this.fnKotTotal();
-    KotMain['Kot_BranchId'] = this.dBranchId;
-    KotMain['Kot_SalesmanId'] = this.SalesmanId;
-    KotMain['Kot_OrderFrom'] = this.selectType;
+    KotMain['KotCustName'] = Kot_CustName;
+    KotMain['KotMobile'] = Kot_Mobile;
+    KotMain['KotTotal'] = Number(this.fnKotTotal());
+    KotMain['KotBranchId'] = Number(this.dBranchId);
+    KotMain['KotSalesmanId'] = Number(this.SalesmanId);
+    KotMain['KotOrderFrom'] = this.selectType;
 
     let dQty = 0, dSelRate = 0, dAmount = 0, dTaxPers = 0, dTaxAmt = 0,
       totAmt = 0, dfinalTotal = 0, dBeforeTaxtotal = 0, dRowAmtBeforeTax = 0, dtotal = 0;
@@ -339,6 +332,7 @@ export class OrderdetailsComponent implements OnInit {
 
       dSelRate = parseFloat((this.orderlist[j].KotSub_ActualRate) || 0);
       dTaxPers = parseFloat((this.orderlist[j].KotSub_TaxPercent) || 0);
+      dtotal = dSelRate;
       if (this.strInclusiveCalRoom == 'Yes') {
         dtotal = dSelRate - ((dSelRate * dTaxPers) / (100 + dTaxPers));
 
@@ -352,14 +346,18 @@ export class OrderdetailsComponent implements OnInit {
       dfinalTotal = dAmount + dfinalTotal;
 
       KotSub = {};
-      KotSub['KotSub_Qty'] = dQty;
-      KotSub['KotSub_ActualRate'] = dSelRate;
-      KotSub['KotSub_TaxPercent'] = dTaxPers;
-      KotSub['ProductId'] = parseFloat((this.orderlist[j].ProductId) || 0);
-      KotSub['KotSub_PurRate'] = parseFloat((this.orderlist[j].KotSub_ActualRate) || 0);
-      KotSub['KotSub_MRP'] = parseFloat((this.orderlist[j].KotSub_MRP) || 0);
-      KotSub['KotSub_TaxAmt'] = dTaxAmt;
-      KotSub['KotSub_Amt'] = dfinalTotal;
+      KotSub['KotSubQty'] = dQty;
+      KotSub['KotSubActualRate'] = dSelRate;
+      KotSub['KotSubTaxPercent'] = dTaxPers;
+      KotSub['ProductId'] =  parseFloat((this.orderlist[j].ProductId) || 0);
+      KotSub['KotSubPurRate'] = parseFloat((this.orderlist[j].KotSub_ActualRate) || 0);
+      KotSub['KotSubMrp'] = parseFloat((this.orderlist[j].KotSub_MRP) || 0);
+      KotSub['KotSubTaxAmt'] = dTaxAmt;
+      KotSub['KotSubAmt'] = dfinalTotal;
+      KotSub['KotSubDisPers'] = 0;
+      KotSub['KotSubDisAmt'] = dAmount
+      
+      
       ListKotSub.push(KotSub);
     }
 
@@ -368,10 +366,12 @@ export class OrderdetailsComponent implements OnInit {
     ListKotMain.push(KotMain);
 
     let body = JSON.stringify(KotMain);
-    this.http.post(this.baseApiUrl + '/KOT/fnSaveKotPost', body, httpOptions)
+      
+    this.appService.post(this.baseApiUrl + '/Master/fnSaveKotPost', body)
       .subscribe(result => {
         let Kot_Id = result;
         this.presentToast();
+        this.kotPrintModal(result);
         loading.dismiss();
         this.orderlist = [];
         this.router.navigate(['/pointofsales']);
@@ -390,28 +390,43 @@ export class OrderdetailsComponent implements OnInit {
     toast.present();
   }
 
+  async kotPrintModal(res) {
+    const modal = await this.modalCtrl.create({
+      component: KotPrintComponent,
+      componentProps: {        
+      } 
+      
+    });
+    return await modal.present();
+  }
+  
+
   fnKotTotal() {
-
-
+   
     let dQty = 0, dSelRate = 0, dAmount = 0, dTaxPers = 0, dTaxAmt = 0,
       dTotal = 0, dRowAmtBeforeTax = 0, dtotal = 0;
+    
     for (let j = 0; j < this.orderlist.length; j++) {
       dSelRate = 0, dAmount = 0;
-      dQty = parseFloat((this.orderlist[j].KotSub_Qty) || 0);
 
+      dQty = parseFloat((this.orderlist[j].KotSub_Qty) || 0);
       dSelRate = parseFloat((this.orderlist[j].KotSub_ActualRate) || 0);
       dTaxPers = parseFloat((this.orderlist[j].KotSub_TaxPercent) || 0);
+      dtotal = dSelRate;
+
       if (this.strInclusiveCalRoom == 'Yes') {
         dtotal = dSelRate - ((dSelRate * dTaxPers) / (100 + dTaxPers));
-
       }
+
       dRowAmtBeforeTax = dQty * dtotal;
       dTaxAmt = (dRowAmtBeforeTax * dTaxPers) / 100;
       dAmount = dRowAmtBeforeTax + dTaxAmt;
+
       this.orderlist[j].KotSub_Amt = dAmount.toFixed(3);
       this.orderlist[j].KotSub_TaxAmt = dTaxAmt.toFixed(3);
-      dTotal = dAmount + dTotal;
 
+      dTotal = dAmount + dTotal;
+      
     }
     // console.log(dTotal);
     return dTotal.toFixed(2);

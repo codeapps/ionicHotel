@@ -1,0 +1,20 @@
+.count-col{
+    input {
+        width: 18px;
+        height: 24px;
+        border: none;
+        border-bottom: 1px solid #333;
+        text-align: center;
+        margin-inline-start: 10px;
+    }
+    ion-button {
+        margin-inline-start: 10px;
+    }
+}
+.list-backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #42424275;
+    z-index: 10;
+}

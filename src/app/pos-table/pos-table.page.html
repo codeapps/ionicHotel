@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Table/Room</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button expand='full' color="tertiary" (click)="onDirectBill()">Direct Bill</ion-button>
+  <ion-segment [(ngModel)]="selectType" color="primary" style="background: #fff;">
+    <ion-segment-button value="Table">
+      <ion-label>Tables</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Room">
+      <ion-label>Rooms</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="selectType" style="height: 100%;">
+  
+    <div *ngSwitchDefault >
+       <ion-grid>
+         <ng-container *ngFor="let item of tabDetail">
+           <ion-row >
+             <ion-col size='12'>
+               <p class="ion-text-center">
+                 <b>{{item.TableName}}</b>
+             </p>
+             </ion-col>
+           
+           </ion-row>
+           <ion-row >
+             <ion-col size='2.4' *ngFor="let tab of item.child">
+                 
+               <ion-button 
+               expand="full" 
+               [color]="tab.BillNo != 0 ? 'success' : 'light'"
+                (click)="selectTableDetail(tab)">
+                 {{tab.TableDetails_Name}}
+               </ion-button>
+             </ion-col>
+           </ion-row>
+         </ng-container>
+         </ion-grid>
+   
+       
+    </div>
+   
+    <div *ngSwitchCase="'Room'" class="drop_back">
+     <ion-grid>
+       <ion-row >
+         <ion-col *ngFor="let room of roomSource;let i = index" size='2.4'>
+           <ion-button expand="full" [color]="room.BillNo != 0 ? 'success' : 'light'" (click)="roomClick(room, i)">
+             {{room.Room_No}}
+           </ion-button>
+         </ion-col>
+       </ion-row>
+     </ion-grid>
+    </div>
+   
+   </div>
+</ion-content>

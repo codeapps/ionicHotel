@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>CodeApps</ion-title>
+        <ion-buttons slot="end">
+            <ion-button slot="icon-only" (click)="close()" >
+                <ion-icon name='close' ></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item-divider>
+            <ion-label>Paired Devices ({{bluetoothList.length}})</ion-label>
+          </ion-item-divider>
+
+          <ion-item lines="full" *ngFor="let bt of bluetoothList">
+            <ion-label>
+                <h2>{{bt.name}}</h2>
+                <p>{{bt.address}}</p>
+              </ion-label>
+              <ion-button  shape="round" fill="outline" slot="end" (click)="setDefault(bt)">Default</ion-button>
+          </ion-item>
+    </ion-list>
+
+</ion-content>
+
+<ion-footer>
+    <ion-button expand="block" (click)="searchPrinter()">
+        Scan
+        <ion-icon name="bluetooth" slot="start"></ion-icon>
+        &nbsp;
+        <ion-spinner *ngIf="btloading" name="crescent" slot="end"></ion-spinner>
+    </ion-button>
+</ion-footer>

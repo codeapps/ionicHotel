@@ -2,15 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ToastController, LoadingController, ActionSheetController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AppService } from '../app.service';
+import { AuthenticationService } from './authentication/authentication.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    Authorization: 'charset=utf-8'
-  })
-};
 
 @Component({
   selector: 'app-login',
@@ -24,10 +19,11 @@ export class LoginPage implements OnInit {
   branchInfo: any;
   apiUrl: any;
 
-  constructor(public formBuilder: FormBuilder, public http: HttpClient,
-    private storage: Storage, public toastController: ToastController,
-    public loadingController: LoadingController,private actionSheetController:ActionSheetController,
-    private router: Router) {
+  constructor(public formBuilder: FormBuilder, private storage: Storage,
+    public toastController: ToastController, public loadingController: LoadingController,
+    private actionSheetController: ActionSheetController,
+    private authService: AuthenticationService,
+    private appService: AppService) {
 
     this.slideOneForm = formBuilder.group({
       username: '',
@@ -67,6 +63,7 @@ export class LoginPage implements OnInit {
         icon: 'lock',
         handler: () => {
           let domainUrl = 'https://' + value.form.value.urllinks + '/WebApi/Api';
+          // let domainUrl = 'https://' + value.form.value.urllinks + '/Api';
           this.getBranch(domainUrl);
         }
       }, {
@@ -74,6 +71,7 @@ export class LoginPage implements OnInit {
         icon: 'unlock',
         handler: () => {
           let domainUrl = 'http://' + value.form.value.urllinks + '/WebApi/Api';
+         
           this.getBranch(domainUrl);
         }
       }, {
@@ -101,31 +99,7 @@ export class LoginPage implements OnInit {
   }
 
   onLogin(value) {
-
-    let strUserName = value.form.value.username;
-    let strpassword = value.form.value.password;
-    let dBranchId = value.form.value.branch;
-    if (value.form.valid) {
-      let AccountHeadInfo = {};
-      AccountHeadInfo['UserName'] = strUserName;
-      AccountHeadInfo['Pwd'] = strpassword;
-      AccountHeadInfo['BranchId'] = dBranchId;
-      let body = JSON.stringify(AccountHeadInfo);
-      this.http.post<any>(this.apiUrl + '/Master/StaffLogin', body, httpOptions).toPromise()
-        .then(async data => {
-          let dataReport = JSON.parse(data);
-          if (dataReport.length > 0) {
-            this.storage.set('SessionBranchId', dBranchId);
-            this.storage.set('SessionStaffId', dataReport[0].StaffId);
-            this.router.navigate(['pointofsales']);
-          } else {
-            this.presentToast('Invalid Username Or Password!');
-          }
-        }, error => console.error(error));
-    } else {
-      this.presentToast('Please fill out all details accurately.');
-    }
-
+    this.authService.onLogin(value, this.apiUrl)
   }
 
 
@@ -134,9 +108,10 @@ export class LoginPage implements OnInit {
       message: 'Loading',
     });
     await loading.present();
-    this.http.get(domainUrl + '/branchGet').subscribe(result => {
+    this.appService.get(domainUrl + '/GetRepository/branchGet')
+      .subscribe(result => {
       this.branchInfo = result;
-      this.storage.clear();
+      // this.storage.clear();
       loading.dismiss();
       this.storage.set('mainurllink', domainUrl);
       this.apiUrl = domainUrl;

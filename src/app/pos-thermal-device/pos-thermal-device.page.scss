@@ -1,0 +1,36 @@
+.sale-flex {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    .top-flex {
+        height: 40%;
+        overflow: auto;
+    }
+    .second-flex {
+        height: 60%;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid #000;
+        ion-button {
+            margin: 0;
+        }
+    }
+}
+
+.active-text {
+    color: #3880ff;
+}
+
+.footer-thermal {
+    ion-buttons {
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        ion-button {
+            height: 40px;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+        }
+    }
+}

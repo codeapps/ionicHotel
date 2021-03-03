@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Bill List</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar #search debounce="500" (ionChange)='onBillGets($event.target.value)'></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <ion-item>
+    <ion-label>From Date</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" (ionChange)='onBillGets(search.value)'
+     placeholder="Select Date" [(ngModel)]="fromDate"></ion-datetime>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label>To Date</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" (ionChange)='onBillGets(search.value)'
+    placeholder="Select Date" [(ngModel)]="toDate"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Series</ion-label>
+    <ion-select placeholder="Select One" [(ngModel)]="strBillSerId" (ionChange)='onBillGets(search.value)'>
+      <ion-select-option *ngFor="let bill of billserice"  [value]="bill.BillSerId">
+        {{bill.BillSerPrefix}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-list>
+    <ion-item *ngFor="let bill of billSource">
+      <ion-label class="ion-text-wrap">
+        <ion-text color="primary">
+          <h3>{{bill.Issues_CustName}}</h3>
+
+        </ion-text>
+        
+       <p>{{bill.BillSerPrefix}} -{{bill.Issues_BillNo}}</p>
+          <ion-text color="secondary" >
+          <p>{{bill.Issues_Date | date:'dd/MM/yyyy'}}</p>
+        </ion-text>
+        <p>Amout:&nbsp;{{bill.Issues_Total}}</p>
+      
+       </ion-label>
+
+       <div slot="end" class="grid-end">
+        <ion-button  fill='clear' (click)="onAnchorClick(bill)">
+          <ion-icon slot="icon-only" color="success" name='create'></ion-icon>
+        </ion-button>
+  
+         <ion-button fill='clear' (click)="onPrint(bill)">
+           <ion-icon slot="icon-only" color="medium" name='print'></ion-icon>
+         </ion-button>
+       </div>
+       
+      
+
+    </ion-item>
+  </ion-list>
+  
+  
+</ion-content>

@@ -17,9 +17,7 @@
 
 <ion-content >
   <div *ngIf="!showSettled" class='settelements'>
-    <ion-button expand='full'  color='tertiary' (click)="getBillSerice();showSettled = true">
-      Bill Settlement
-    </ion-button>
+   
 
     <ion-text color="dark">
       <p>&nbsp; SalesMan:&nbsp;<span>{{salesman}}</span></p>
@@ -29,17 +27,17 @@
     <ion-list>
       <ion-item>
         <ion-label>Qty&nbsp;-&nbsp;ProductName&nbsp;</ion-label>
-        <ion-label>Amount</ion-label>
+        <ion-label slot="end" class="ion-text-end">Amount</ion-label>
       </ion-item>
 
       <ion-item *ngFor="let item of reportItems">
         <ion-label>{{item.KotSub_Qty}}&nbsp;-&nbsp;{{item.ProductName}}&nbsp;</ion-label>
-        <ion-label>{{item.KotSub_Amt}}</ion-label>
+        <ion-label slot="end" class="ion-text-end">{{item.KotSub_Amt}}</ion-label>
       </ion-item>
 
       <ion-item>
         <ion-label>Total</ion-label>
-        <ion-label>{{ fnBillTotal()}}</ion-label>
+        <ion-label slot="end" class="ion-text-end">{{ fnBillTotal()}}</ion-label>
       </ion-item>
     </ion-list>
   </div>
@@ -156,3 +154,11 @@
 
   </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand='full'  color='tertiary' (click)="getBillSerice();showSettled = true">
+      Bill Settlement
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

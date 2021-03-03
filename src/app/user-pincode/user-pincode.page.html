@@ -1,0 +1,70 @@
+<ion-content class="ion-padding">
+  <section *ngIf="!show">
+    <h3 class="ion-text-center">Create Your Pin</h3>
+
+    <ion-card>
+      <div class="ion-padding">
+        <ion-label class="label-ks">Enter Pin Number(4 Digit) *</ion-label>
+        <span class="input-span" (click)="crfocusIndex = 0"
+        [ngClass]="{'active': crfocusIndex == 0}">{{pinCreate.newpin}}</span>
+      
+        <ion-label class="label-ks">Re Enter Pin Number *</ion-label>
+        <span class="input-span" (click)="crfocusIndex = 1"
+        [ngClass]="{'active': crfocusIndex == 1}">
+        {{pinCreate.repin.length == 1 ? 'X': '' }}
+        {{pinCreate.repin.length == 2 ? 'XX': '' }}
+        {{pinCreate.repin.length == 3 ? 'XXX': '' }}
+        {{pinCreate.repin.length == 4 ? 'XXXX': '' }}
+      </span>
+      </div>
+
+
+    </ion-card>
+
+    <app-pos-keybord (enterKeys)='onCreatePressed($event)'></app-pos-keybord>
+    <ion-button routerLink='/login' class="ion-text-capitalize" expand='full' fill='clear' color="primary">
+      Back To Login
+    </ion-button>
+  </section>
+
+  <section *ngIf="show">
+    <h3 class="ion-text-center">Enter Your Pin</h3>
+    <ion-card>
+
+      <ion-grid class="input-grid">
+        <ion-row class="ion-align-items-center">
+          <ion-col class="ion-align-self-center" size="3">
+            <span (click)="focusIndex = 0" class="input-span"
+              [ngClass]="{'active': focusIndex == 0}">
+              {{ pin.a ? 'X': '' }}
+             </span>
+          </ion-col>
+          <ion-col class="ion-align-self-center" size="3">
+            <span (click)="focusIndex = 1" class="input-span" 
+            [ngClass]="{'active': focusIndex == 1}">
+            {{ pin.b ? 'X': '' }}
+          </span>
+          </ion-col>
+          <ion-col class="ion-align-self-center" size="3">
+            <span (click)="focusIndex = 2" class="input-span" 
+            [ngClass]="{'active': focusIndex == 2}">
+            {{ pin.c ? 'X': '' }}
+          </span>
+          </ion-col>
+          <ion-col class="ion-align-self-center" size="3">
+            <span (click)="focusIndex = 3" class="input-span" 
+            [ngClass]="{'active': focusIndex == 3}">
+            {{ pin.d ? 'X': '' }}
+          </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <app-pos-keybord (enterKeys)='onKeyPressed($event)'></app-pos-keybord>
+    <ion-button routerLink='/login' class="ion-text-capitalize" expand='full' fill='clear' color="tertiary">
+      Login with UserId
+    </ion-button>
+  </section>
+
+
+</ion-content>

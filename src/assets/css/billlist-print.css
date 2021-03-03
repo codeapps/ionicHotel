@@ -1,0 +1,44 @@
+.header-box {
+    align-items: center;
+}
+.header-box h2 {
+        margin: 0;
+    }
+    .header-box p {
+        margin: 0;
+    }
+
+    .tbl-print {
+        width: 100%;
+       
+    }
+
+    .tbl-print table {
+        width: 100%;
+        border-collapse: collapse;
+       
+    }
+
+    .tbl-print table th {
+        border: 1px solid #000;
+    }
+
+    .tbl-print table td {
+        border: 1px solid #000;
+    }
+
+
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+    }
+    .flex-row {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    .w-50 {
+        width: 50%;
+    }
+    

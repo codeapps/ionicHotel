@@ -1,0 +1,54 @@
+<ion-card>
+  <ion-grid class="keybord-grid">
+    <ion-row class="ion-align-items-center">
+      <ion-col size="4">
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('1')">1</ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('2')">2</ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('3')">3</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('4')">4</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('5')">5</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('6')">6</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('7')">7</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('8')">8</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('9')">9</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button shape="round" fill="clear" color="medium" size="large" (click)="onKeyPress('back')">
+          <ion-icon slot="icon-only" name="backspace"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="outline" size="large" (click)="onKeyPress('0')">0</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button shape="round" fill="clear" color="success" size="large" (click)="onKeyPress('ok')">
+          Ok
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-card>

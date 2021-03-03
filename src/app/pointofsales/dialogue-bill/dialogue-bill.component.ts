@@ -1,15 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NavParams, ModalController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { AppService } from 'src/app/app.service';
+import { BillPrintComponent } from 'src/app/print/bill-print/bill-print.component';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'charset=utf-8'
-  })
-};
 
 @Component({
   selector: 'app-dialogue-bill',
@@ -34,20 +29,25 @@ export class DialogueBillComponent implements OnInit {
   dBranchId: any;
   staffId: any;
 
-  constructor(navParams: NavParams, public http: HttpClient, private storage: Storage, private router: Router,
-    public modalctl: ModalController,private toastController:ToastController) {
+  constructor(navParams: NavParams, private appService: AppService,
+    storage: Storage,
+    private router: Router,
+    public modalctl: ModalController,
+    private toastController: ToastController) {
     this.reportItems = navParams.data[0];
     this.Kotdetails = navParams.data[1];
-    this.storage.get('mainurllink').then((val) => {
+   
+    storage.forEach((val, key) => {
+      if (key == 'mainurllink') 
       this.baseApiUrl = val;
-      this.AccoundHeadGet();
-    });
-    this.storage.get('SessionBranchId').then((val) => {
+      else if (key == 'SessionBranchId')
       this.dBranchId = val;
-    });
-    this.storage.get('SessionStaffId').then((val) => {
+      else if (key == 'SessionStaffId')
       this.staffId = val;
-    });
+    }).finally(() => {
+      this.AccoundHeadGet();
+    })
+    
    
   }
 
@@ -58,6 +58,8 @@ export class DialogueBillComponent implements OnInit {
     this.Months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
       '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
   }
+
+ 
 
   getFullyear() {
     let date = new Date();
@@ -72,7 +74,8 @@ export class DialogueBillComponent implements OnInit {
   }
   async getBillSerice() {
 
-    this.http.get(this.baseApiUrl + '/KOT/GetBillSerice').subscribe(result => {
+    this.appService.get(this.baseApiUrl + '/GetRepository/GetBillSerice')
+      .subscribe(result => {
       this.billserice = result;
       this.billSerId = this.billserice[0].BillSerId;
     }, error => console.error(error));
@@ -84,7 +87,7 @@ export class DialogueBillComponent implements OnInit {
     ServiceParams['strProc'] = 'AccoundHead_GetOnBank';
 
     let body = JSON.stringify(ServiceParams);
-    this.http.post<any>(this.baseApiUrl + '/fnGetDataReportNew', body, httpOptions)
+    this.appService.post(this.baseApiUrl + '/CommonQuery/fnGetDataReportNew', body)
       .subscribe(data => {
 
         this.accoundHedGetData = JSON.parse(data);
@@ -94,6 +97,8 @@ export class DialogueBillComponent implements OnInit {
 
 
   OnPayments() {
+   
+    
     // console.log(this.billSerId);
     // console.log(this.payments);
     if (this.BankID == undefined && this.payments == 'CARD') {
@@ -106,27 +111,35 @@ export class DialogueBillComponent implements OnInit {
     let Issue = {};
     let IssueSub = {};
 
-    Issue['TableDetail_Id'] = this.Kotdetails.tbldetailId;
-    Issue['Table_Id'] = this.Kotdetails.tblid;
-    Issue['Issues_CustName'] = this.Kotdetails.Kot_CustName;
-    Issue['Issues_Mobile'] = this.Kotdetails.Kot_Mobile;
-    Issue['Issues_Total'] = this.fnBillTotal();
+    Issue['TableDetailId'] = this.Kotdetails.tbldetailId;
+    Issue['TableId'] = this.Kotdetails.tblid;
+    Issue['IssuesCustName'] = this.Kotdetails.Kot_CustName;
+    Issue['IssuesMobile'] = this.Kotdetails.Kot_Mobile;
+    Issue['IssuesTotal'] = Number(this.fnBillTotal());
     Issue['BillSerId'] = this.billSerId;
     Issue['BranchId'] = this.dBranchId;
-    Issue['Issues_TempOrderNo'] = this.Kotdetails.Kot_TempOrderNo;
-    Issue['Kot_Id'] = this.Kotdetails.Kot_Id;
-    Issue['Room_Id'] = 0;
-    Issue['Issues_OrderFrom'] = this.Kotdetails.selectType;
-    Issue['Issues_SalesmanId'] = this.Kotdetails.Kot_SalesmanId;
-    Issue['Issue_PayTerms'] = this.payments;
-    Issue['StaffId'] = this.staffId;
+    Issue['IssuesTempOrderNo'] = this.Kotdetails.Kot_TempOrderNo;
+    Issue['KotId'] = 0;
+    Issue['RoomId'] = this.Kotdetails.tblid;
+    Issue['IssuesOrderFrom'] = this.Kotdetails.selectType;
+    Issue['IssuesSalesmanId'] = this.Kotdetails.Kot_SalesmanId;
+    Issue['IssuePayTerms'] = this.payments;
+    
+    Issue['IssuesDisPers'] = 0;
+    Issue['IssuesDisAmt'] = 0;
+    Issue['IssuesRof'] = 0;
+    Issue['IssuesAtotal'] = this.fnBillTotal;
+    Issue['IssuesBillNo'] = 0;
+    Issue['UniqueNo'] = 0;
+   
+    // Issue['StaffId'] = this.staffId;
 
-    if (this.payments == 'CARD') {
-      Issue['Issue_CardNo'] = this.CardNumber;
-      Issue['Issue_CardName'] = this.CardName;
-      Issue['Issue_CardAmt'] = this.fnBillTotal();
-      Issue['Issue_Banker'] = this.BankID;
-    }
+    // if (this.payments == 'CARD') {
+    //   Issue['Issue_CardNo'] = this.CardNumber;
+    //   Issue['Issue_CardName'] = this.CardName;
+    //   Issue['Issue_CardAmt'] = this.fnBillTotal();
+    //   Issue['Issue_Banker'] = this.BankID;
+    // }
     let dQty = 0, dSelRate = 0, dAmount = 0, dTaxPers = 0, dTaxAmt = 0,
       totAmt = 0, dTotal = 0;
 
@@ -140,23 +153,34 @@ export class DialogueBillComponent implements OnInit {
       dAmount = (dQty * dSelRate) + (dTaxAmt);
       dTaxAmt = parseFloat((this.reportItems[j].KotSub_TaxAmt) || 0);
       IssueSub = {};
-      IssueSub['IssuesSub_Qty'] = dQty;
-      IssueSub['IssuesSub_ActualRate'] = dSelRate;
-      IssueSub['IssuesSub_TaxPercent'] = dTaxPers;
+      IssueSub['IssuesSubQty'] = dQty;
+      IssueSub['IssuesSubActualRate'] = dSelRate;
+      IssueSub['IssuesSubTaxPercent'] = dTaxPers;
       IssueSub['ProductId'] = parseFloat((this.reportItems[j].ProductId) || 0);
-      IssueSub['IssuesSub_PurRate'] = parseFloat((this.reportItems[j].KotSub_ActualRate) || 0);
-      IssueSub['IssuesSub_MRP'] = parseFloat((this.reportItems[j].KotSub_MRP) || 0);
+      IssueSub['IssuesSubPurRate'] = parseFloat((this.reportItems[j].KotSub_ActualRate) || 0);
+      IssueSub['IssuesSubMrp'] = parseFloat((this.reportItems[j].KotSub_MRP) || 0);
       IssueSub['BillSerId'] = this.billSerId;
-      IssueSub['IssuesSub_TaxAmt'] = dTaxAmt;
-      IssueSub['IssuesSub_Amt'] = dAmount;
-      IssueSub['IssuesSub_TaxId'] = parseFloat((this.reportItems[j].TaxId) || 0);
-      IssueSub['IssuesSub_SGSTTaxPercent'] = parseFloat((this.reportItems[j].SGSTTaxPers) || 0);
-      IssueSub['IssuesSub_CGSTTaxPercent'] = parseFloat((this.reportItems[j].CGSTTaxPers) || 0);
-      IssueSub['IssuesSub_IGSTTaxPercent'] = parseFloat((this.reportItems[j].IGSTTaxPers) || 0);
-      IssueSub['Store_BatchSlNo'] = 0;
+      IssueSub['IssuesSubTaxAmt'] = dTaxAmt;
+      IssueSub['IssuesSubAmt'] = dAmount;
+      IssueSub['IssuesSubTaxId'] = parseFloat((this.reportItems[j].TaxId) || 0);
+      IssueSub['IssuesSubSgsttaxPercent'] = parseFloat((this.reportItems[j].SGSTTaxPers) || 0);
+      IssueSub['IssuesSubCgsttaxPercent'] = parseFloat((this.reportItems[j].CGSTTaxPers) || 0);
+      IssueSub['IssuesSubIgsttaxPercent'] = parseFloat((this.reportItems[j].IGSTTaxPers) || 0);
+      IssueSub['StoreBatchSlNo'] = 0;
       IssueSub['BranchId'] = this.dBranchId;
-      ListIssueSub.push(IssueSub);
 
+      IssueSub['IssuesSubSgsttaxAmt'] = dTaxAmt / 2;
+        IssueSub['IssuesSubCgsttaxAmt'] = dTaxAmt / 2;
+       
+        IssueSub['StoreBatchSlNo'] = 0;
+        IssueSub['IssuesSubFeildNo1'] = 0;
+        IssueSub['IssuesSubFeildNo2'] = 0;
+        IssueSub['IssuesSubDiscPerc'] = 0;
+        IssueSub['IssuesSubDiscAmnt'] = 0;
+        IssueSub['IssuesAtotal'] = dAmount;
+        IssueSub['IssuesRof'] = 0;
+      ListIssueSub.push(IssueSub);
+      
     }
 
     Issue['IssueSubDetail'] = ListIssueSub;
@@ -167,18 +191,39 @@ export class DialogueBillComponent implements OnInit {
 
 
     var headers = new Headers();
-
+    
     headers.append('Content-Type', 'application/json; charset=utf-8');
-    this.http.post(this.baseApiUrl + '/KOT/fnSaveBill', body, httpOptions)
+    this.appService.post(this.baseApiUrl + '/Master/fnSaveBill', body)
       .subscribe(
         result => {
           let report = result;
+
           this.payments = 'CASH';
           this.presentToast();
+          this.printModal(report);
           this.modalctl.dismiss();
         }, error => {
           console.log(error);
         });
+  }
+
+  async printModal(report) {
+    
+    const billSerId =  report.BillSerId; // 1
+    const billNo = report.IssuesBillNo; //493
+    const uniqueNo = report.UniqueNo; // 503
+    const printType = this.Kotdetails.selectType;
+    const modal = await this.modalctl.create({
+      component: BillPrintComponent,
+      componentProps: {
+        billSerId: billSerId,
+        billNo:billNo,
+        uniqueNo: uniqueNo,
+        printType: printType,
+      } 
+      
+    });
+    return await modal.present();
   }
 
   async presentToast() {

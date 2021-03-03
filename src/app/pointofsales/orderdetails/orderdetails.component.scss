@@ -46,6 +46,27 @@
                 width: 30%;
                 height: 90vh;
                 overflow: auto;
+                .categoryactive{
+                    background-color: #d22e2a !important;
+                    color: #fff;
+                }
+              .inner-col {
+                width: 100%;
+                display: flex;
+                min-height: 45px;
+                background: #fff;
+                height: auto;
+                max-height: 150px;
+                font-size: 12px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 5px;
+                overflow: hidden;
+                word-break: break-word;
+                border-radius: 2px;
+                
+              }
             }
 
             .div_inner2 {

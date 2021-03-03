@@ -1,14 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { AppService } from 'src/app/app.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'charset=utf-8'
-  })
-};
 
 @Component({
   selector: 'app-dialogues-salesman',
@@ -19,12 +13,17 @@ export class DialoguesSalesmanComponent implements OnInit {
   baseApiUrl: any;
   searchSalesmanResult: any;
   salesManId: any;
-
-  constructor(public modalCtrl: ModalController, public http: HttpClient, private storage: Storage,) {
-    this.storage.get('mainurllink').then((val) => {
-      this.baseApiUrl = val;
+  branchId: string = '0';
+  constructor(public modalCtrl: ModalController,private appService: AppService, private storage: Storage,) {
+    this.storage.forEach((val, key) => {
+      if (key == 'SessionBranchId')
+        this.branchId = String(val);
+      else if (key == 'mainurllink')
+        this.baseApiUrl = val;
+    }).finally(() => {
       this.Salesman_Get();
-    });
+    })
+ 
    }
 
   ngOnInit() {}
@@ -53,12 +52,17 @@ export class DialoguesSalesmanComponent implements OnInit {
     ProcParams['strArgmt'] = '';
     oProcParams.push(ProcParams);
 
+    ProcParams = {};
+    ProcParams['strKey'] = 'BranchId';
+    ProcParams['strArgmt'] = this.branchId;
+    oProcParams.push(ProcParams);
+
 
     ServiceParams['oProcParams'] = oProcParams;
 
     let body = JSON.stringify(ServiceParams);
    
-     await this.http.post<any>(this.baseApiUrl + '/fnGetDataReportNew', body, httpOptions)
+     await this.appService.post(this.baseApiUrl + '/CommonQuery/fnGetDataReportNew', body)
       .subscribe(result => {
 
         this.searchSalesmanResult = JSON.parse(result);

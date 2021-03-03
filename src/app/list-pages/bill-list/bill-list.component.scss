@@ -1,0 +1,8 @@
+::ng-deep .thermal-print {
+    --width: 260px;
+    --height: 390px;
+}
+.grid-end {
+    display: grid;
+    grid-row-gap: 15px;
+}
