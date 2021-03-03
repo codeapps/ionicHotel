@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
 import { ModalController } from '@ionic/angular';
 import { ThermalPrintComponent } from 'src/app/print/thermal-print/thermal-print.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bill-list',
@@ -18,7 +19,10 @@ export class BillListComponent implements OnInit {
   strBillSerId: any = 0;
   fromDate = new Date(new Date().setDate(1)).toISOString();
   toDate = new Date().toISOString();
-  constructor(private appService: AppService,private modalController: ModalController,
+  constructor(
+    private appService: AppService,
+    private modalController: ModalController,
+    private router:Router,
      storage: Storage, private datePipe:DatePipe) {
     storage.forEach((val, key) => {
       if (key=="mainurllink") {
@@ -189,11 +193,15 @@ export class BillListComponent implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     
-    
   }
-  onAnchorClick(bill) {
-    console.log(bill);
-    
 
+  onAnchorClick(bill) {
+   
+    
+    this.router.navigate(['/posdevice',
+      {
+        BillSerId: bill.BillSerId, BillNo: bill.Issues_BillNo,
+        UniqueNo: bill.Unique_No, name: bill.Issues_OrderFrom,  type: 'Edit Bill'
+      }]);
   }
 }

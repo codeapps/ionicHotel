@@ -155,7 +155,7 @@
   </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="!showSettled">
   <ion-toolbar>
     <ion-button expand='full'  color='tertiary' (click)="getBillSerice();showSettled = true">
       Bill Settlement

@@ -126,4 +126,37 @@ export class PosAllService {
     return this.http.get(url + '/GetRepository/Product_GetOnProductId?dProductId=' + productId + '&branchId=' + branchId);
                 
   }
+
+  onPosThermalGet(url, BillSerId, BillNo, UniqueNo, name):Observable<any> {
+    let ServiceParams = {};
+    ServiceParams['strProc'] = 'Issues_CopyBillNo';
+
+    let oProcParams = [];
+
+    let ProcParams = {};
+
+    ProcParams['strKey'] = 'BillSerId';
+    ProcParams['strArgmt'] = String(BillSerId);
+    oProcParams.push(ProcParams);
+
+    ProcParams = {};
+    ProcParams['strKey'] = 'Issues_BillNo';
+    ProcParams['strArgmt'] = String(BillNo);
+    oProcParams.push(ProcParams);
+
+    ProcParams = {};
+    ProcParams['strKey'] = 'Unique_No';
+    ProcParams['strArgmt'] = String(UniqueNo);
+    oProcParams.push(ProcParams);
+
+    ProcParams = {};
+    ProcParams['strKey'] = 'Issues_OrderFrom';
+    ProcParams['strArgmt'] = name;
+    oProcParams.push(ProcParams);
+
+    ServiceParams['oProcParams'] = oProcParams;
+    let body = JSON.stringify(ServiceParams);
+      
+    return this.http.post(url + "/CommonQuery/fnGetDataReportReturnMultiTable", body, httpOptions)
+  }
 }

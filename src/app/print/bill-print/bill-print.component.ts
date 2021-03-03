@@ -126,4 +126,12 @@ export class BillPrintComponent implements OnInit {
   onClose() {
     this.modalCtrl.dismiss();
   }
+
+  onTotalQty() { 
+   return this.JsonIssueSubDetailsInfo.map(x => parseFloat(x.IssuesSub_Qty || 0)).reduce((a, b) => a + b);
+  }
+  
+  onTotalAmount() {
+    return this.JsonIssueSubDetailsInfo.map(x => parseFloat(x.IssuesSub_Amt || 0)).reduce((a, b) => a + b);
+  }
 }

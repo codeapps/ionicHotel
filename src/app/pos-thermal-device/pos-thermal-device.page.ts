@@ -17,6 +17,9 @@ export class PosThermalDevicePage implements OnInit {
   posTypeset = {
     id: '',
     name: '',
+    BillSerId: '0',
+    BillNo: '0',
+    UniqueNo: '0',
     type: ''
   }
   codeFlag: boolean = false;
@@ -75,15 +78,28 @@ export class PosThermalDevicePage implements OnInit {
     const Id = this.route.snapshot.paramMap.get('id');
     const name = this.route.snapshot.paramMap.get('name');
     const type = this.route.snapshot.paramMap.get('type');
+
+    const BillSerId = this.route.snapshot.paramMap.get('BillSerId');
+    let BillNo = this.route.snapshot.paramMap.get('BillNo');
+    let UniqueNo = this.route.snapshot.paramMap.get('UniqueNo');
+    if (!BillNo) {
+      BillNo = '0';
+      UniqueNo = '0';
+    }
+    // 
     this.posTypeset = {
       id: Id,
       name: name,
+      BillSerId: BillSerId,
+      BillNo: BillNo,
+      UniqueNo: UniqueNo,
       type: type
     }
+
   }
+ 
 
   async fnSettings() {
-
     await this.appService.onSettings(this.baseApiUrl)
       .subscribe(data => {
         let settingGet = JSON.parse(data);
@@ -94,7 +110,53 @@ export class PosThermalDevicePage implements OnInit {
 
         });
         // this.fnBillTotal();
+        if (this.posTypeset.type == 'Edit Bill') {
+          this.onAnchorClick()
+        }
       }, error => console.error(error));
+  }
+
+  async onAnchorClick() {
+    this.listProducts = [];
+    
+    this.posService.onPosThermalGet(this.baseApiUrl, this.posTypeset.BillSerId, this.posTypeset.BillNo,
+      this.posTypeset.UniqueNo, this.posTypeset.name)
+      .subscribe(res => {
+        const json = JSON.parse(res);
+        const main = JSON.parse(json[0])[0];
+        const sub = JSON.parse(json[1]);
+        
+        
+        this.user = {
+          accId: '0',
+          accName: main.AC_Name,
+          phone: ''
+        }
+
+        sub.forEach((ele, index) => {
+         let billPrev = {
+            id: index,
+            productId: ele.ProductId,
+            code: ele.ItemCode,
+            name: ele.ProductName,
+            qty: ele.IssuesSub_Qty,
+            disc: '0',
+            rate: ele.IssuesSub_ActualRate,
+            PurRate: ele.IssuesSub_PurRate,
+            SGSTTaxPers: ele.IssuesSub_SGSTTaxPercent,
+            IGSTTaxPers: ele.IssuesSub_IGSTTaxPercent,
+            CGSTTaxPers: ele.IssuesSub_CGSTTaxPercent,
+            TaxId: ele.IssuesSub_TaxId,
+            tax: ele.IssuesSub_TaxPercent,
+            mrp: ele.IssuesSub_MRP,
+            total: ele.IssuesSub_Amt
+         }
+          this.listProducts.push(billPrev);
+        });
+
+        
+
+      });
   }
 
   onKeyboard(eve) {
@@ -183,6 +245,9 @@ export class PosThermalDevicePage implements OnInit {
   }
   onNewBill() {
     this.listProducts = [];
+    this.posTypeset.BillNo = '0';
+    this.posTypeset.UniqueNo = '0';
+    
     this.onClear();
     this.user = {
       accId: '',
@@ -379,11 +444,14 @@ export class PosThermalDevicePage implements OnInit {
   }
 
   async onPayment() {
+   
     const modal = await this.modalController.create({
       component: PaymentComponent,
       componentProps: {
         activeType: this.posTypeset,
         main: {
+          IssuesBillNo: this.posTypeset.BillNo,
+          UniqueNo: this.posTypeset.UniqueNo,
           paid: this.getTotalAmount(),
           discount: '0.00',
           taxableAmt: '0.00',
