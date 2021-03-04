@@ -16,6 +16,7 @@ import { PosAllService } from '../services/pos-all.service';
 export class PosThermalDevicePage implements OnInit {
   posTypeset = {
     id: '',
+    detailId: '0',
     name: '',
     BillSerId: '0',
     BillNo: '0',
@@ -55,6 +56,7 @@ export class PosThermalDevicePage implements OnInit {
   qtyFlag: boolean;
   editFlag: boolean;
   loading: boolean;
+  anchor: boolean;
 
   constructor(private appService: AppService, private posService: PosAllService,
     public modalController: ModalController,
@@ -78,7 +80,8 @@ export class PosThermalDevicePage implements OnInit {
     const Id = this.route.snapshot.paramMap.get('id');
     const name = this.route.snapshot.paramMap.get('name');
     const type = this.route.snapshot.paramMap.get('type');
-
+    const detailId = this.route.snapshot.paramMap.get('detailId');
+    
     const BillSerId = this.route.snapshot.paramMap.get('BillSerId');
     let BillNo = this.route.snapshot.paramMap.get('BillNo');
     let UniqueNo = this.route.snapshot.paramMap.get('UniqueNo');
@@ -89,6 +92,7 @@ export class PosThermalDevicePage implements OnInit {
     // 
     this.posTypeset = {
       id: Id,
+      detailId: detailId,
       name: name,
       BillSerId: BillSerId,
       BillNo: BillNo,
@@ -125,14 +129,17 @@ export class PosThermalDevicePage implements OnInit {
         const json = JSON.parse(res);
         const main = JSON.parse(json[0])[0];
         const sub = JSON.parse(json[1]);
-        
-        
+        this.anchor = true;
+        if (main) {
         this.user = {
-          accId: '0',
-          accName: main.AC_Name,
+          accId: main.AcId ? main.AcId: '0',
+          accName: main.Issues_CustName ? main.Issues_CustName: '',
           phone: ''
         }
-
+        this.posTypeset.id = main.Table_Id
+        this.posTypeset.detailId = main.TableDetail_Id
+        }
+        
         sub.forEach((ele, index) => {
          let billPrev = {
             id: index,
@@ -244,6 +251,10 @@ export class PosThermalDevicePage implements OnInit {
     this.focusIndexed = 0;
   }
   onNewBill() {
+    if (this.anchor) {
+      this.router.navigate(['/pos-table']);
+      return
+    }
     this.listProducts = [];
     this.posTypeset.BillNo = '0';
     this.posTypeset.UniqueNo = '0';

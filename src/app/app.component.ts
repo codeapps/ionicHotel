@@ -21,12 +21,12 @@ export class AppComponent {
       
       title: 'Room Booking',
       url: '/booking/roomregister',
-      icon: 'book'
+      icon: 'bed'
     },
     {
       title: 'Kot List',
       url: '/pointofsales/kotlist',
-      icon: 'book'
+      icon: 'list-box'
     },
     {
       title: 'Bill List',
@@ -36,7 +36,7 @@ export class AppComponent {
     {
       title: 'POS New',
       url: '/pos-table',
-      icon: 'restaurant'
+      icon: 'phone-portrait'
       
     },
     {

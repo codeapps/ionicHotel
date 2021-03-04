@@ -66,6 +66,7 @@ export class PosTablePage implements OnInit {
         
         this.onRoomGets();
       }, error => {
+          if (this.loading) 
         this.loading.dismiss()
         console.error(error)
       });
@@ -102,7 +103,7 @@ export class PosTablePage implements OnInit {
   }
 
   fnKotBillGetOnTableDetailId(tab) {
-   
+  
     this.posService.onKotBillGetOnTableDetailId(this.baseApiUrl, String(tab.TableDetails_Id))
       .subscribe(data => {
         let dataReport = JSON.parse(data);
@@ -110,13 +111,16 @@ export class PosTablePage implements OnInit {
         if (dataReport.length > 0) {
           
         } else {
-          this.router.navigate(['/posdevice', { id: tab.TableDetails_Id , name: tab.TableDetails_Name, type: this.selectType}]);
+          this.router.navigate(['/posdevice', { id: tab.Table_Id,detailId: tab.TableDetails_Id, name: tab.TableDetails_Name, type: this.selectType}]);
         }
       });
   }
 
   onDirectBill() {
+   
+    
     const tab = this.tabDetail[0].child[0];
-    this.router.navigate(['/posdevice', { id: tab.TableDetails_Id , name: tab.TableDetails_Name, type: 'Direct Bill'}]);
+    const tabId = this.tabDetail[0].TableId;
+    this.router.navigate(['/posdevice', { id: tabId,detailId: tab.TableDetails_Id, name: tab.TableDetails_Name, type: 'Direct Bill'}]);
   }
 }

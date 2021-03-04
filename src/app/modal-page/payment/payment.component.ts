@@ -118,11 +118,12 @@ export class PaymentComponent implements OnInit {
   fnDirectBill() {
      
     let Issue = {};
-    Issue['TableId'] = this.activeType.Table_Id;
-    Issue['TableDetailId'] = this.activeType.TableDetail_Id;
+    Issue['TableId'] = Number(this.activeType.id);
+    Issue['TableDetailId'] = Number(this.activeType.detailId);
     Issue['BillSerId'] = this.billSeriesId;
     Issue['IssuesCustName'] = this.main.cusName;
-    Issue['IssuesMobile'] = this.main.custId.toString();
+    Issue['AcId'] = Number(this.main.custId);
+    Issue['IssuesMobile'] = this.main.phone.toString();
     Issue['IssuesTotal'] = this.main.paid;
     Issue['BranchId'] = Number(this.dBranchId);
     Issue['IssuesSalesmanId'] = this.salesmanId;

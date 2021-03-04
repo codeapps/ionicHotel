@@ -1,3 +1,39 @@
-<p>
-  room-register works!
-</p>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size='4' class="flex-y"> 
+        <ion-button size='small' color="success">&nbsp;</ion-button>
+        <span>&nbsp;Selected</span>
+      </ion-col>
+      <ion-col size='4' class="flex-y">
+        <ion-button size='small' color="secondary">&nbsp;</ion-button>
+        <span>&nbsp;Avilable</span>
+      </ion-col>
+      <ion-col size='4' class="flex-y">
+        <ion-button size='small' color="danger">&nbsp;</ion-button>
+      <span>&nbsp;Booked</span>
+    </ion-col>
+    </ion-row>
+    <ion-row >
+      <!-- <h3>Floor ({{room.TotalRooms}})</h3> -->
+      <!-- Room_IsBook Yes -->
+      <ion-col size='4' *ngFor="let item of roomSource; let i = index">
+        <ion-card class="ion-padding ion-no-margin ion-activatable ripple-parent"
+         [color]="item.Room_IsBook == 'Yes' && !item.selected? 'danger': onColor(item.selected)"
+          (click)="onClick(i)">
+          <p class="ion-no-margin">{{item.Floor_Name}} - {{item.Floor_NoRooms}}</p>
+          <p>{{item.RoomType_Name}} - {{item.Room_No}}</p>
+          <p class="ion-no-margin">Ex.Bed: {{item.RoomType_ExtBedRent}}</p>
+         <p>Duration: {{item.RoomType_Duration}} </p>
+          <p class="ion-no-margin">Rent: {{item.RoomType_Rent}}</p>
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button [disabled]="!disable">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
