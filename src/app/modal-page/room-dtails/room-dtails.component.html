@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button fill='clear' expand='block' color="danger" (click)="onClose()">
+      <ion-icon name='close'></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list lines='full'>
+    <ion-card>
+      <ion-item color="medium">
+        <ion-label>Check In Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="roomMain.checkInDate" placeholder="Select Date">
+        </ion-datetime>
+      </ion-item>
+
+      <ion-item color="medium">
+        <ion-label>Check In Time</ion-label>
+        <ion-datetime displayFormat="h:mm a" [(ngModel)]="roomMain.checkInTime"></ion-datetime>
+      </ion-item>
+
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="floating">Customer Name</ion-label>
+        <ion-input [(ngModel)]="roomMain.custName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Address</ion-label>
+        <ion-input [(ngModel)]="roomMain.address"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label position="floating">Mail</ion-label>
+        <ion-input [(ngModel)]="roomMain.mail" type="email" inputmode="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Mobile</ion-label>
+        <ion-input [(ngModel)]="roomMain.mobile" type="number" inputmode="tel"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Proof</ion-label>
+        <ion-select [(ngModel)]="roomMain.idProof">
+          <ion-select-option *ngFor="let item of identification"
+          [value]="item.IdentificationId">{{item.IdentificationName}}</ion-select-option>
+          
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Description</ion-label>
+        <ion-textarea rows="3" cols="20" [(ngModel)]="roomMain.idDescription"
+          placeholder="Enter Identification Details here..."></ion-textarea>
+      </ion-item>
+    </ion-card>
+
+  
+
+    <ion-card>
+      <ion-item color="medium">
+        <ion-label>Check Out Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="roomMain.checkOutDate" placeholder="Select Date">
+        </ion-datetime>
+      </ion-item>
+
+      <ion-item color="medium">
+        <ion-label>Check Out Time</ion-label>
+        <ion-datetime displayFormat="h:mm a" [(ngModel)]="roomMain.checkOutTime"></ion-datetime>
+      </ion-item>
+
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="floating">Child</ion-label>
+        <ion-input type="number" [(ngModel)]="roomMain.child" inputmode="numeric"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Adult</ion-label>
+        <ion-input type="number" inputmode="numeric" [(ngModel)]="roomMain.adult"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">No of Days</ion-label>
+        <ion-input type="number" inputmode="decimal" [(ngModel)]="roomMain.noofDays"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Pre Amount</ion-label>
+        <ion-input type="number" inputmode="decimal" [(ngModel)]="roomMain.preAmount"></ion-input>
+      </ion-item>
+
+    </ion-card>
+
+    <ion-card>
+      <ion-item *ngFor="let item of params">
+        <ion-label>
+          <h3>{{item.RoomType_Name}}</h3>
+          <p>{{item.Room_No}}</p>
+
+        </ion-label>
+
+        <ion-text color="secondary">
+          <p>₹&nbsp;{{item.RoomType_Rent | number : '1.2-2'}}</p>
+        </ion-text>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item >
+        <ion-label>
+          <h3>Total</h3>
+        </ion-label>
+        <ion-text color="success">
+          <p>₹&nbsp;{{totalAmt() | number : '1.2-2'}}</p>
+        </ion-text>
+      </ion-item>
+    </ion-card>
+
+    
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button fill='clear' expand='block' (click)="fnSave()" color="success" >
+      Check In
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

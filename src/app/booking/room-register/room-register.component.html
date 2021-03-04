@@ -20,12 +20,12 @@
       <ion-col size='4' *ngFor="let item of roomSource; let i = index">
         <ion-card class="ion-padding ion-no-margin ion-activatable ripple-parent"
          [color]="item.Room_IsBook == 'Yes' && !item.selected? 'danger': onColor(item.selected)"
-          (click)="onClick(i)">
-          <p class="ion-no-margin">{{item.Floor_Name}} - {{item.Floor_NoRooms}}</p>
+          (click)="onClick(item, i)">
+          <p class="ion-no-margin">{{item.Floor_Name}}</p>
           <p>{{item.RoomType_Name}} - {{item.Room_No}}</p>
           <p class="ion-no-margin">Ex.Bed: {{item.RoomType_ExtBedRent}}</p>
-         <p>Duration: {{item.RoomType_Duration}} </p>
-          <p class="ion-no-margin">Rent: {{item.RoomType_Rent}}</p>
+         <!-- <p>Duration: {{item.RoomType_Duration}} </p> -->
+          <p class="ion-no-margin">₹&nbsp;{{item.RoomType_Rent}}</p>
         <ion-ripple-effect></ion-ripple-effect>
       </ion-card>
       </ion-col>
@@ -33,7 +33,7 @@
   </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button [disabled]="!disable">
+    <ion-fab-button (click)="roomRegModal()" [disabled]="!disable">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

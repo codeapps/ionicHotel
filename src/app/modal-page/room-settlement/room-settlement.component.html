@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-title color="primary">
+      {{roomsMain?.CustomerName}}
+    </ion-title>
+
+    <ion-text color="primary" slot="end">
+      <span style="color: #000;">Room No:&nbsp;</span>
+      {{roomsMain?.Room_No}}
+    </ion-text>
+    <ion-buttons slot="end">
+      <ion-button slot="icon-only" color="danger" (click)="onClose()">
+        <ion-icon name='close'></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines='none'>
+    <ion-card>
+      <ion-item color="medium">
+        <ion-label>Check In Date</ion-label>
+        <p>{{roomsMain?.CheckInDate | date:'dd/MM/yyy'}}</p>
+      </ion-item>
+      <ion-item color="medium">
+        <ion-label>Check Out Date</ion-label>
+        <p>
+          {{roomsMain?.CheckoutDate | date:'dd/MM/yyy'}}
+        </p>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item lines='full'>
+        <ion-label>Mobile</ion-label>
+        <p>{{roomsMain?.Phone}}</p>
+      </ion-item>
+
+      <ion-item lines='full'>
+        <ion-label>No Of Days</ion-label>
+        <p>{{roomsMain?.NoOfDays}}</p>
+      </ion-item>
+
+      <ion-item lines='full'>
+        <ion-label>Restorunt Total</ion-label>
+        <p></p>
+      </ion-item>
+
+      <ion-item lines='full'>
+        <ion-label>Hotel Total</ion-label>
+        <p></p>
+      </ion-item>
+
+      <ion-item lines='full'>
+        <ion-label>Net Amount</ion-label>
+        <p>₹&nbsp;{{roomsMain?.Rate | number : '1.2-2'}}</p>
+      </ion-item>
+
+    </ion-card>
+
+    <ion-card>
+      <ion-item color="tertiary">
+        <ion-label>Bill Type</ion-label>
+        <ion-select>
+          <ion-select-option *ngFor="let item of billserice" [value]="item.BillSerId">
+            {{item.BillSerPrefix}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item color="tertiary">
+        <ion-label>Payment</ion-label>
+        <ion-select>
+          <ion-select-option value="CASH">CASH</ion-select-option>
+          <ion-select-option value="CARD">CARD</ion-select-option>
+          <ion-select-option value="CREDIT">CREDIT</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item color="tertiary">
+        <ion-label>Discount</ion-label>
+        <ion-input type='number'></ion-input>
+      </ion-item>
+    </ion-card>
+
+    <ion-card >
+      <ion-item class="ion-text-center">
+        <ion-label>Total:&nbsp;₹&nbsp;{{roomsMain?.Rate | number : '1.2-2'}}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-center">
+        <ion-label>Advance:&nbsp;₹&nbsp;{{roomsMain?.Registration_AdvanceAmt | number : '1.2-2'}}</ion-label>
+      </ion-item>
+      <ion-item class="ion-text-center">
+        <ion-label color="success">Balance:&nbsp;₹&nbsp;{{roomsMain?.Rate - roomsMain?.Registration_AdvanceAmt | number : '1.2-2'}}</ion-label>
+      </ion-item>
+    </ion-card>
+
+  </ion-list>
+  <!-- roomsMain -->
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button fill='clear' expand='block' color="success">
+      Check Out
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

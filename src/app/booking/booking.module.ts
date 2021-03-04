@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { BookingPage } from './booking.page';
 import { RoomRegisterComponent } from './room-register/room-register.component';
+import { RoomDtailsComponent } from '../modal-page/room-dtails/room-dtails.component';
+import { RoomSettlementComponent } from '../modal-page/room-settlement/room-settlement.component';
 
 const routes: Routes = [
   {
@@ -30,7 +32,8 @@ const routes: Routes = [
     
     RouterModule.forChild(routes)
   ],
-  declarations: [BookingPage, RoomRegisterComponent],
+  declarations: [BookingPage, RoomRegisterComponent, RoomDtailsComponent, RoomSettlementComponent],
+  entryComponents: [RoomDtailsComponent, RoomSettlementComponent],
   providers: []
 })
 export class BookingPageModule {}
