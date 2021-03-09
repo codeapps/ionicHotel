@@ -1,0 +1,100 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button color="success" (click)="fnSave()" [disabled]='loading'>
+                
+                <ion-icon slot="start" name="save"></ion-icon>
+                Save
+            </ion-button>
+        </ion-buttons>
+
+        <ion-buttons slot="end">
+            <ion-button color="danger" (click)="onDissmiss()">
+                <ion-icon slot="icon-only" name='close'></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list lines='full'>
+        <ion-card>
+            <ion-item>
+                <ion-label position="floating">Item Code</ion-label>
+                <ion-input type='number' inputmode='numeric' [(ngModel)]="productSource.ItemCode"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Product Name</ion-label>
+                <ion-input [(ngModel)]="productSource.ProductName"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">HSN Code</ion-label>
+                <ion-input [(ngModel)]="productSource.HsnCode"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label >Manufacture</ion-label>
+                <ion-select placeholder="Select One" [(ngModel)]="productSource.ManufacturingId">
+                  <ion-select-option *ngFor="let item of manufacture"
+                   [value]="item.Manufacture_Id">{{item.Manufacture_Name}}</ion-select-option>
+                  
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label >Tax(%)</ion-label>
+                <ion-select placeholder="Select One" [(ngModel)]="productSource.TaxGroupId">
+                  <ion-select-option *ngFor="let tax of taxSource" [value]="tax.TaxGroupId">
+                    {{tax.TaxName}}
+                  </ion-select-option>
+                  
+                </ion-select>
+              </ion-item>
+
+              <ion-item>
+                <ion-label >Category</ion-label>
+                <ion-select placeholder="Select One" [(ngModel)]="productSource.CategoryID">
+                  <ion-select-option *ngFor="let item of category" [value]="item.CategoryId">
+                    {{item.CategoryName}}
+                  </ion-select-option>
+                  
+                </ion-select>
+              </ion-item>
+
+        </ion-card>
+
+        <ion-card>
+
+            <ion-item>
+                <ion-label>MRP Rate</ion-label>
+                <ion-input type='number' inputmode='decimal' [(ngModel)]="productSource.MrpRate"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Selling Rate</ion-label>
+                <ion-input type='number' inputmode='decimal' [(ngModel)]="productSource.SelRate"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Purchase Rate</ion-label>
+                <ion-input type='number' inputmode='decimal' [(ngModel)]="productSource.PurRate"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Discount</ion-label>
+                <ion-input type='number' inputmode='decimal' [(ngModel)]="productSource.Discount"></ion-input>
+              </ion-item>
+
+            </ion-card>
+            <ion-card>
+
+            <ion-item>
+                <ion-label>Stock Check</ion-label>
+                <ion-toggle [(ngModel)]="productSource.Stock_Check"></ion-toggle>
+              </ion-item>
+            </ion-card>
+    </ion-list>
+
+</ion-content>

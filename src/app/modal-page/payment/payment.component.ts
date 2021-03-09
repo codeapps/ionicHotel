@@ -212,7 +212,7 @@ export class PaymentComponent implements OnInit {
 
   getBillSerice() {
 
-    this.appService.get(this.baseApiUrl + '/GetRepository/GetBillSerice').toPromise()
+    this.appService.getBillSerice(this.baseApiUrl).toPromise()
       .then(result => {
         this.billserice = result;
         if (this.billserice.length)

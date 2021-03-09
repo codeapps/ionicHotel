@@ -73,7 +73,8 @@ export class RoomRegisterComponent implements OnInit {
     let filterProps = this.roomSource.filter(x => x.selected);
     const modal = await this.modalController.create({
       component: RoomDtailsComponent,
-      componentProps: {params: filterProps}
+      componentProps: { params: filterProps },
+      animated: false
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
@@ -86,9 +87,16 @@ export class RoomRegisterComponent implements OnInit {
   
     const modal = await this.modalController.create({
       component: RoomSettlementComponent,
-      componentProps: {roomId: id}
+      componentProps: { roomId: id },
+      animated: false
     });
-    return await modal.present();
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data) 
+      this.getFloor();
+     
+    
+     
   }
 
   
@@ -96,7 +104,7 @@ export class RoomRegisterComponent implements OnInit {
   async alertToast(msg:string, header:string) {
     const toast = await this.toastController.create({
       header:header,
-      message: msg,
+      message: msg, 
       duration: 2000,
       color: 'danger'
     });

@@ -122,10 +122,7 @@ export class PosAllService {
     return this.http.post(url + '/CommonQuery/fnGetDataReportFromScriptJsonFile', body, httpOptions)
   }
 
-  onProductGet(url, productId, branchId):Observable<any> {
-    return this.http.get(url + '/GetRepository/Product_GetOnProductId?dProductId=' + productId + '&branchId=' + branchId);
-                
-  }
+  
 
   onPosThermalGet(url, BillSerId, BillNo, UniqueNo, name):Observable<any> {
     let ServiceParams = {};

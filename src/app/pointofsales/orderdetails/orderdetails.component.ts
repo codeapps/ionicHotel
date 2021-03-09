@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController, ActionSheetController, LoadingController, ToastController, ModalController } from '@ionic/angular';
 import { AppService } from 'src/app/app.service';
 import { KotPrintComponent } from 'src/app/print/kot-print/kot-print.component';
+import { ProductsService } from 'src/app/products/products.service';
 
 @Component({
   selector: 'app-orderdetails',
@@ -31,6 +32,7 @@ export class OrderdetailsComponent implements OnInit {
   constructor(
     private storage: Storage,
     private appService: AppService,
+    private productService: ProductsService,
     private router: Router,
     activeroute: ActivatedRoute,
     public alertController: AlertController,
@@ -80,7 +82,7 @@ export class OrderdetailsComponent implements OnInit {
   }
  
   getCategory() {
-    this.appService.get(this.baseApiUrl + '/GetRepository/SearchCategory?term=' + '')
+    this.productService.onGetCategory(this.baseApiUrl)
       .subscribe(result => {
       this.category = result;
       this.getProduct(this.category[0], 0);
@@ -244,7 +246,7 @@ export class OrderdetailsComponent implements OnInit {
     }
 
     if (sameId) {
-      this.appService.get(`${this.baseApiUrl}/GetRepository/Product_GetOnProductId?dProductId=${Id}&branchId=${this.dBranchId}`)
+      this.productService.onProductGet(this.baseApiUrl, Id, this.dBranchId)
         .subscribe(result => {
           let jsonData = <any>result;
              

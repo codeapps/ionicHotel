@@ -6,6 +6,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { DialogueBillComponent } from '../dialogue-bill/dialogue-bill.component';
 import { BillPrintComponent } from 'src/app/print/bill-print/bill-print.component';
 import { PosAllService } from 'src/app/services/pos-all.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class TableorderComponent implements OnInit {
   roomSource: any;
   Room_Id: any = 0;
   tables: any[] = [];
+  navigationSubscription: Subscription;     
   constructor(
     private storage: Storage,
     private posService: PosAllService,
@@ -47,14 +49,27 @@ export class TableorderComponent implements OnInit {
       else if (key == 'mainurllink')
         this.baseApiUrl = val;
     }).finally(() => {
+     
       this.getTables();
     })
    
-    
+    this.navigationSubscription = this.router.events.subscribe((e: any) => {
+      // If it is a NavigationEnd event re-initalise the component
+      if (e instanceof NavigationEnd) {
+        if (e.url == '/pointofsales') {
+          if (this.baseApiUrl) 
+            this.getTables();
+        }
+      }
+    });
   }
 
   ngOnInit() { }
-  
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
   doRefresh(event) {
     this.getTables();
 
@@ -88,6 +103,8 @@ export class TableorderComponent implements OnInit {
       .subscribe(async res => {
         this.tables = res;
         await this.getTableDtl();
+      }, err => {
+        this.tables = [];
     })
  }
 

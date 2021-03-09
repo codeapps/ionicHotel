@@ -6,6 +6,7 @@ import { AppService } from '../app.service';
 import { AddCustomerComponent } from '../modal-page/add-customer/add-customer.component';
 import { PaymentComponent } from '../modal-page/payment/payment.component';
 import { ThermalPrintService } from '../print/thermal-print/thermal-print.service';
+import { ProductsService } from '../products/products.service';
 import { PosAllService } from '../services/pos-all.service';
 
 @Component({
@@ -60,6 +61,7 @@ export class PosThermalDevicePage implements OnInit {
 
   constructor(private appService: AppService, private posService: PosAllService,
     public modalController: ModalController,
+    private productService: ProductsService,
     private printService: ThermalPrintService,
     private route: ActivatedRoute,
     private router: Router,
@@ -299,7 +301,7 @@ export class PosThermalDevicePage implements OnInit {
               const dataItems = productCode[0];
               if (this.billPrev.code == dataItems.ItemCode) {
                 this.billPrev.code = dataItems.ItemCode;
-                this.posService.onProductGet(this.baseApiUrl, dataItems.ProductId, this.dBranchId)
+                this.productService.onProductGet(this.baseApiUrl, dataItems.ProductId, this.dBranchId)
                   .toPromise()
                   .then(res => {
                     const product = res[0];

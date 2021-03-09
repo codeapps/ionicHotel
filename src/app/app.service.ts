@@ -34,4 +34,8 @@ export class AppService {
   
       return this.post(url + '/CommonQuery/fnGetDataReportNew', body)
   }
+
+  getBillSerice(url):Observable<any> {
+    return this.get(url + '/GetRepository/GetBillSerice');
+  }
 }

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>products</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar debounce="500" placeholder="Product name here.." enterkeyhint='search'
+     (ionChange)='getProducts($event.target.value)'></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-virtual-scroll [items]="productSource">
+  <ion-item button *virtualItem="let item" (click)="productModal(item)">
+    <ion-avatar slot="start">
+      <img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAL0AAAELCAMAAAC77XfeAAAAllBMVEUZdbH///
+      +MjIyRjowcebM+aIoZdrJ7qs4UbaWIiIiLi4uZmZne3t6RkZEZcq3h7vWSu9j4+/3E2uo0hrsqgLhzq8/W2dsYZ5vy8vLJy
+      clneYe9vb2qqqqvz+OCsNHY6fNCjr9NlMJence50OMjdajS3uccaZZifI91gotXd41IcI1IbYemyeAYcKcYX4ssYoUiYIiysr
+      JOVjYeAAADGElEQVR4nO3V3U7iYBhF4bYoUigFpFgQ/EEUUQcd7//m5mtBHWcmmRAPdpfZK3BWkic7b0MUk4vUgC/1jfSDi+HlS
+      bMbXv1bPzqdXI+L4qjhFcuL0d/6wWQc5O2o4bXbR/ny6k/96c24+fS3itVnPQof5W/8nX5wU4DwgX9796EfTUjLV+Xrs3f9KQ0fR
+      Z37szf9pKDho+26l+30g+sjNebg8nKzmNb6izFR/5DOav2Qdzjh8B9bvWmlvyzUlMNrB32aVfoT3uEE/XErnZP13QVVHwV90qfqq
+      +2TxHpFbH2E1rO3Z+t9ObqsF4bWs7e3Xhdb77dWl/XC0Hr29tYLQ+vZ21svDK1nb2+9MLSevb31wtB69vbWC0Pr2dtbLwytZ29vvT
+      C0nr09W+/L0WW9MLSevb31wtB69vbWC0Pr2dtbLwytZ29vvTC0nr299brYer+1uqwXhtazt7deGFrP3t56YWg9e3vrhaH17O2tF4b
+      Ws7dn6305uqwXhtazt7deGFrP3t56YWg9e3vrhaH17O2tF4bWs7e3Xhhaz97eemFoPXt764Wh9eztrdfF1vut1WW9MLSevb31wtB6
+      9vZsvS9Hl/XC0Hr29tYLQ+vZ21svDK1nb2+9MLSevb31wtB69vbWC0Pr2dtbLwytZ29vvTC0nr299cLQevb21gtD69nbWy8MrWdvb
+      70wtJ69vfXC0Hr29tYLQ+vZ21svDK1nb2+9MLSevb31wtB69vbWC0Pr2dtbLwytZ29vvTC0nr299cK+if4SrR8S9eXTXv+jaKstB5e
+      XD3v9oOCNv33eJEm/0sdL3PZ5+dJKur1av8rVmkPrPJ8H/aLWj5ZqzYGF6dMkSWe1Pr4qUOvn5c9w9Uk63enjFYkf8OcV/jXe6+PVL
+      YbfCfhuknT72bs+vlt3tnketdvhc8j3wMe/9vOw+7Z8fqnOJknn8Yc+Prtfl2Wn6QX7eVrjF6Pf9XHW2zw8Hje8p00r/Mcm3Rr/uz7
+      OFmmr8SX18P15hf+kj6ezXpp2k4bXTdPXbAf+pA/+bN7rq3n/qTebjvbcX7BHUaJDs4Q0AAAAAElFTkSuQmCC">
+    </ion-avatar>
+    <ion-label>
+     <h3>{{item.ItemCode}}</h3>
+     <p>{{item.ProductName}}</p>
+    </ion-label>
+    <ion-text color="primary">
+      <p>₹&nbsp;{{item.SelRate}}</p>
+    </ion-text>
+  </ion-item>
+  
+</ion-virtual-scroll>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button (click)="productModal(false)">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+</ion-content>

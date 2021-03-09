@@ -74,7 +74,7 @@ export class DialogueBillComponent implements OnInit {
   }
   async getBillSerice() {
 
-    this.appService.get(this.baseApiUrl + '/GetRepository/GetBillSerice')
+    this.appService.getBillSerice(this.baseApiUrl)
       .subscribe(result => {
       this.billserice = result;
       this.billSerId = this.billserice[0].BillSerId;

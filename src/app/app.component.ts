@@ -24,6 +24,12 @@ export class AppComponent {
       icon: 'bed'
     },
     {
+      
+      title: 'Products',
+      url: 'products',
+      icon: 'wine'
+    },
+    {
       title: 'Kot List',
       url: '/pointofsales/kotlist',
       icon: 'list-box'

@@ -55,17 +55,13 @@
       
        </ion-label>
 
-       <div slot="end" class="grid-end">
-        <ion-button  fill='clear' (click)="onAnchorClick(bill)">
+        <ion-button slot="end" fill='outline' color="success" (click)="onAnchorClick(bill)">
           <ion-icon slot="icon-only" color="success" name='create'></ion-icon>
         </ion-button>
   
-         <ion-button fill='clear' (click)="onPrint(bill)">
-           <ion-icon slot="icon-only" color="medium" name='print'></ion-icon>
+         <ion-button slot="end" fill='outline' color="medium"  (click)="onPrint(bill)">
+           <ion-icon slot="icon-only"  name='print'></ion-icon>
          </ion-button>
-       </div>
-       
-      
 
     </ion-item>
   </ion-list>

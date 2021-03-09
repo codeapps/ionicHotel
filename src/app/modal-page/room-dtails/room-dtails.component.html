@@ -42,7 +42,8 @@
 
       <ion-item>
         <ion-label position="floating">Mobile</ion-label>
-        <ion-input [(ngModel)]="roomMain.mobile" type="number" inputmode="tel"></ion-input>
+        <ion-input [(ngModel)]="roomMain.mobile" minlength='10' min='10' max='10'
+        type="number" inputmode="tel"></ion-input>
       </ion-item>
 
       <ion-item>

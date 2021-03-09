@@ -20,20 +20,30 @@
  
 
   <ion-list>
-    <ion-item *ngFor="let kot of kotSource">
-      <ion-label class="ion-text-wrap">
-        <ion-text color="primary">
-          <h3>{{kot.ProductName}}</h3>
-        </ion-text>
-        <p>{{kot.Table_Name}}</p>
-        <p>{{kot.TableDetail_Name}}</p>
-       </ion-label>
+    <ion-card *ngFor="let kot of kotSource">
+      <ion-item lines='full' color="tertiary">
+        <ion-label>
+          <h3>Bill No: {{kot.BillNo}}</h3>
+          
+          <p>Total Quantity: {{kot.Qty}}</p>
+        </ion-label>
+        <div>
+          <p>{{kot.BillDate | date:'dd/MM/yyy'}}</p>
+          <p>₹&nbsp;{{kot.Amount | number: '1.2-2'}}</p>
+        </div>
+       
+      </ion-item>
 
-      <ion-text color="secondary" slot="end">
-        <p>Qty:{{kot.Qty}}</p>
-        <p>Amount:{{kot.Amount}}</p>
-      </ion-text>
-    </ion-item>
+      <ion-item *ngFor="let item of kot.child" lines='none'>
+        <ion-label>
+          <h3>{{item.ProductName}}</h3>
+          <p>Quantity:  {{item.Qty}}</p>
+
+        </ion-label>
+        <p>₹&nbsp;{{item.Amount | number: '1.2-2'}}</p>
+      </ion-item>
+    </ion-card>
+    
   </ion-list>
   
   

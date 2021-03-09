@@ -25,6 +25,10 @@ const routes: Routes = [
     
   },
   {
+    path: 'products',
+    loadChildren: () => import('./products/products.module').then(m => m.ProductsPageModule)
+  },
+  {
     path: 'posdevice',
     loadChildren: () => import('./pos-thermal-device/pos-thermal-device.module').then(m => m.PosThermalDevicePageModule)
   }, 
@@ -43,6 +47,7 @@ const routes: Routes = [
     path: 'print-settings',
     component: PrintSettingsComponent
   },
+  { path: 'products', loadChildren: './products/products.module#ProductsPageModule' },
   
   // { path: 'pointofsales', loadChildren: './pointofsales/pointofsales.module#PointofsalesPageModule' },
  

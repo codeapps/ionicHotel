@@ -13,19 +13,19 @@ export class KotListComponent implements OnInit {
   branchId: number = 0;
   constructor(private appService: AppService,
     private storage: Storage) {
-      storage.forEach((val, key) => {
-        if (key=="mainurllink") {
-          this.basicApi = val;
-        } else if (key=="SessionBranchId") {
-          this.branchId = val;
-        }
-      }).finally(() => {
-        this.onKotBillGetOnTableDetailId();
-      })
-     }
+    storage.forEach((val, key) => {
+      if (key == "mainurllink") {
+        this.basicApi = val;
+      } else if (key == "SessionBranchId") {
+        this.branchId = val;
+      }
+    }).finally(() => {
+      this.onKotBillGetOnTableDetailId();
+    })
+  }
 
   ngOnInit() { }
-  
+
   onKotBillGetOnTableDetailId() {
 
     let ServiceParams = {};
@@ -44,10 +44,55 @@ export class KotListComponent implements OnInit {
 
     this.appService.post(this.basicApi + '/CommonQuery/fnGetDataReportNew', body)
       .subscribe(res => {
-      this.kotSource = JSON.parse(res)
-      
-    })
+        let dataSource = JSON.parse(res);
+        
+        let itemObj = {
+          Amount: 0,
+          BillDate: "",
+          BillNo: "",
+          Qty: 0,
+          TableDetail_Name: "",
+          child: []
+        }
+       
+        let bill = false
+        for (const res of dataSource) {
+          if (!res.BillNo && !res.ProductName && res.TableDetail_Name) {
+            itemObj.TableDetail_Name = res.TableDetail_Name
+            bill = true
+          } else if (res.BillNo && res.ProductName && !res.TableDetail_Name) {
+            itemObj.BillNo = res.BillNo;
+            itemObj.BillDate = res.BillDate;
+            if (bill) {
+              itemObj.child.push(res);
+            }
+
+          } else if (res.ProductName == 'Total') {
+            itemObj.Qty = res.Qty;
+            itemObj.Amount = res.Amount;
+            
+            this.onPushed(itemObj);
+            itemObj = {
+              Amount: 0,
+              BillDate: "",
+              BillNo: "",
+              Qty: 0,
+              TableDetail_Name: "",
+              child: []
+            }
+            
+            bill = false;
+           
+          }
+
+        }
+
+      })
 
   }
 
+  onPushed(items) {
+    this.kotSource.push(items);
+    
+  }
 }

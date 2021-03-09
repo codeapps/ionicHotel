@@ -21,6 +21,7 @@ export class BillListComponent implements OnInit {
   toDate = new Date().toISOString();
   constructor(
     private appService: AppService,
+    
     private modalController: ModalController,
     private router:Router,
      storage: Storage, private datePipe:DatePipe) {
@@ -38,7 +39,7 @@ export class BillListComponent implements OnInit {
   ngOnInit() {}
 
   getBillSerice() {
-    this.appService.get(this.basicApi+'/GetRepository/GetBillSerice')
+    this.appService.getBillSerice(this.basicApi)
       .subscribe(result => {
         this.billserice = result;
         this.strBillSerId = this.billserice[0].BillSerId;
