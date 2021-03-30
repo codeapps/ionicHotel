@@ -58,7 +58,7 @@ export class PosTablePage implements OnInit {
     await this.posService.onGetTableDtls(this.baseApiUrl, this.branchId)
       .subscribe(data => {
         let dataJson = JSON.parse(data);
-         this.tables.map(x => {
+        this.tables.map(x => {
          x.child = dataJson.filter(y => y.Table_Id == x.TableId)
         })
        

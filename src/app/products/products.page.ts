@@ -217,8 +217,7 @@ export class ProductsModal  {
         this.alertToast('Saved Successfully', 'Success');
         this.loading = false;
         this.modalController.dismiss(true);
-       
-      }, err => {
+      }, () => {
         this.alertToast('Server Busy..', 'Warning');
     })
   }

@@ -1,3 +1,4 @@
+import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
@@ -40,13 +41,13 @@ export class AppComponent {
       icon: 'book'
     },
     {
-      title: 'POS New',
+      title: 'Direct Billing',
       url: '/pos-table',
       icon: 'phone-portrait'
       
     },
     {
-      title: 'Point of Sales',
+      title: 'Kot Billing',
       url: '/pointofsales',
       icon: 'restaurant'
       
@@ -60,11 +61,13 @@ export class AppComponent {
     
   ];
 
+  public hostName: string = '';
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
+    private storage: Storage,
     private authenticationService: AuthenticationService
   ) {
     this.initializeApp();
@@ -80,6 +83,14 @@ export class AppComponent {
         } else {
           this.router.navigate(['login']);
         }
+        this.storage.get('mainurllink').then(url => {
+          
+          if (url) {
+            const domain = new URL(url);
+            this.hostName = domain.host;
+          }
+          
+        })
       });
     });
   }

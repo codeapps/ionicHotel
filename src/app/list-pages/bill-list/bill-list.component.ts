@@ -21,7 +21,6 @@ export class BillListComponent implements OnInit {
   toDate = new Date().toISOString();
   constructor(
     private appService: AppService,
-    
     private modalController: ModalController,
     private router:Router,
      storage: Storage, private datePipe:DatePipe) {
